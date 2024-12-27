@@ -14,7 +14,7 @@ import { ButtonComponent } from '@syncfusion/ej2-react-buttons';
 
 function App() {
   return (<ScheduleComponent>
-    <Inject services = {[Jour, Semaine, SemaineTravail, Mois, Agenda]}></Inject>
+    <Inject services = {[Day, Week, WorkWeek, Month, Agenda]}></Inject>
   </ScheduleComponent>);
 }
 

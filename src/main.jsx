@@ -6,10 +6,5 @@ import App from './App.jsx'
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <App />
-    <body>
-        <div id='schedule'>
-            <div id='loader'>Loading....</div>
-        </div>
-    </body>
   </StrictMode>,
 )

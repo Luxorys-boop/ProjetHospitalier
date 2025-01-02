@@ -2,14 +2,13 @@ import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
-import { CalendarComponent } from '@syncfusion/ej2-react-calendars'
-import * as React from 'react';
-import { useRef } from 'react';
-import * as ReactDOM from 'react-dom';
+import { Inject, ScheduleComponent, Day, Week, WorkWeek, Month, Agenda } from '@syncfusion/ej2-react-schedule';
 
 
 function App() {
-  return <ScheduleComponent></ScheduleComponent>;
+  return <ScheduleComponent>
+    <Inject services={[Day, Week, WorkWeek, Month, Agenda]}
+  </ScheduleComponent>;
 }
 
 export default App

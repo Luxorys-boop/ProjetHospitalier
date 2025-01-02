@@ -23,11 +23,20 @@ a:hover {
 }
 
 body {
-  margin: 0;
-  display: flex;
-  place-items: center;
+  display: grid;
   min-width: 320px;
   min-height: 100vh;
+}
+
+section#barre {
+  display: grid;
+  margin-left: 1.5em;
+  margin-right: 1.5em;
+  padding: 1.5em;
+  grid-template-columns: 20em 17em 19em 20em;
+  grid-template-rows: 1em;
+  background-color: white;
+  color: black;
 }
 
 h1 {

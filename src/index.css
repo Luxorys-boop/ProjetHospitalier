@@ -23,26 +23,75 @@ a:hover {
 }
 
 body {
-  display: grid;
   min-width: 320px;
   min-height: 100vh;
+  margin-left: 4em;
+  margin-right: 4em;
 }
 
-section#barre {
+nav#barre {
   display: grid;
-  margin-left: 1.5em;
-  margin-right: 1.5em;
-  padding: 1.5em;
-  grid-template-columns: 20em 17em 19em 20em;
-  grid-template-rows: 1em;
-  background-color: white;
+  padding: 1em;
+  height: fit-content;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-template-rows: 1fr;
+  background-color: #15182096;
   color: black;
+}
+
+nav#barre div {
+  margin: 0 1em 0 1em;
+  background-color: #333;
+}
+
+nav#barre div p {
+  text-align: center;
 }
 
 h1 {
   font-size: 3.2em;
   line-height: 1.1;
 }
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: Arial, sans-serif;
+}
+
+thead {
+  background-color: lightslategray;
+  color: white;
+  justify-content: center;
+}
+
+
+
+thead p {
+  font-size: 18px;
+  margin: 0;
+  padding: 10px;
+  color: black;
+}
+
+tbody tr:nth-child(odd) {
+  background-color: #f9f9f9;
+}
+
+tbody tr:nth-child(even) {
+  background-color: #f1f1f1;
+}
+
+td {
+  border: 1px solid #ccc;
+  text-align: center;
+  padding: 8px;
+  color: black;
+}
+
+
+
+
 
 button {
   border-radius: 8px;
@@ -74,4 +123,52 @@ button:focus-visible {
   button {
     background-color: #f9f9f9;
   }
+}
+
+.month {
+  background-color: white;
+  color: black;
+  padding: 1em;
+  text-align: center;
+  margin: 0;
+}
+
+.search-container { 
+  display: flex; 
+  justify-content: center; 
+  align-items: center; 
+} 
+
+.search-box {
+  width: 100%;
+  max-width: 600px;
+  border: 2px solid #333;
+  
+  overflow: hidden;
+  display: flex;
+  background-color: #333;
+}
+
+.search-box input {
+  border: none;
+  outline: none;
+  padding: 10px 20px;
+  width: 100%;
+  font-size: 16px;
+}
+
+.search-box button {
+  border: none;
+  outline: none;
+  padding: 10px 20px;
+  background-color: #555;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 0 25px 25px 0;
+  transition: background-color 0.3s ease;
+}
+
+.search-box button:hover {
+  background-color: #797979;
 }

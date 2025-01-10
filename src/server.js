@@ -11,7 +11,7 @@ const config = {
   user: 'root',
   password: '',
   database: 'planning_hospitalier',
-  port: '3306',
+  port: '5001',
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0,

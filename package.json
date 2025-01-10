@@ -10,6 +10,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.21.2",
+    "mysql2": "^3.12.0",
     "projethospitalier": "file:",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"

@@ -4,6 +4,7 @@ function TableMaker() {
     const [month] = useState(getMonth());
     const startDay = new Date(year, getMonthIndex(month), 1).getDay(); // Jour de la semaine du 1er du mois
 
+    //Get le nombre de jour dans le mois
     const TableRow = () => {
         const days = Array.from({ length: 30 }, (_, index) => {
         const dayOfWeek = (startDay + index) % 7; // Calculer le jour de la semaine

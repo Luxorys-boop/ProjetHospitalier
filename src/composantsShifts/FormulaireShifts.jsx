@@ -7,7 +7,6 @@ function FormulaireShifts({ shift, onFermer }) {
   const [besoin_infirmiers, setBesoinInfirmiers] = useState(
     shift ? shift.besoin_infirmiers : ""
   );
-  const [service_id, setServiceId] = useState(shift ? shift.service_id : "");
 
   // Utiliser useEffect pour réinitialiser les champs lorsque shift change
   useEffect(() => {
@@ -16,13 +15,11 @@ function FormulaireShifts({ shift, onFermer }) {
       setHeureDebut(shift.heure_debut);
       setDuree(shift.duree);
       setBesoinInfirmiers(shift.besoin_infirmiers);
-      setServiceId(shift.service_id);
     } else {
       setNom("");
       setHeureDebut("");
       setDuree("");
       setBesoinInfirmiers("");
-      setServiceId("");
     }
   }, [shift]);
 
@@ -31,12 +28,12 @@ function FormulaireShifts({ shift, onFermer }) {
 
     const url = "http://localhost:5001/query";
     const sql = shift
-      ? "UPDATE shifts SET nom = ?, heure_debut = ?, duree = ?, besoin_infirmiers = ?, service_id = ? WHERE id = ?"
-      : "INSERT INTO shifts (nom, heure_debut, duree, besoin_infirmiers, service_id) VALUES (?, ?, ?, ?, ?)";
+      ? "UPDATE shifts SET nom = ?, heure_debut = ?, duree = ?, besoin_infirmiers = ? WHERE id = ?"
+      : "INSERT INTO shifts (nom, heure_debut, duree, besoin_infirmiers) VALUES (?, ?, ?, ?)";
 
     const params = shift
-      ? [nom, heure_debut || null, duree, besoin_infirmiers, service_id, shift.id]
-      : [nom, heure_debut || null, duree, besoin_infirmiers, service_id];
+      ? [nom, heure_debut || null, duree, besoin_infirmiers, shift.id]
+      : [nom, heure_debut || null, duree, besoin_infirmiers];
 
     try {
       const response = await fetch(url, {
@@ -88,14 +85,6 @@ function FormulaireShifts({ shift, onFermer }) {
             type="number"
             value={besoin_infirmiers}
             onChange={(e) => setBesoinInfirmiers(e.target.value)}
-          />
-        </div>
-        <div>
-          <label>Service ID :</label>
-          <input
-            type="number"
-            value={service_id}
-            onChange={(e) => setServiceId(e.target.value)}
           />
         </div>
         <div className="confirm-boutons">

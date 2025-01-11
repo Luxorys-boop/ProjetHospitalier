@@ -7,6 +7,6 @@ import AppShifts from './composantsShifts/AppShifts.jsx'
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <App />
-    
+    <AppShifts />
   </StrictMode>,
 )

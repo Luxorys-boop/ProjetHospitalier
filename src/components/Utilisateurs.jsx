@@ -115,15 +115,6 @@ function UtilisateursPage() {
         <div>
             {/* Formulaire pour les champs */}
             <div>
-                <label>ID :</label>
-                <input
-                    type="number"
-                    value={id}
-                    onChange={(e) => setId(e.target.value)}
-                    placeholder="ID de l'utilisateur"
-                />
-            </div>
-            <div>
                 <label>Nom :</label>
                 <input
                     type="text"
@@ -136,10 +127,8 @@ function UtilisateursPage() {
             {/* Boutons pour les opérations CRUD */}
             <div>
                 <button onClick={handleGetAll}>Get All</button>
-                <button onClick={handleGetById}>Get By Id</button>
                 <button onClick={handleCreate}>Create</button>
-                <button onClick={handleUpdate}>Update</button>
-                <button onClick={handleDelete}>Delete</button>
+                
             </div>
 
             {/* Affichage des résultats ou des erreurs */}

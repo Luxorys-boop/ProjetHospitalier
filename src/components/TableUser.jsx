@@ -32,7 +32,7 @@ const TableUser = ({ daysInMonth, startDay }) => {
             {error && <p style={{ color: 'red' }}>{error}</p>}
             {users.map((user) => (
                 <tr key={user.id}>
-                    <td>{user.id}</td>
+                    <td>{user.id}<input type="checkbox" id="scales" value={user.id} /></td>
                     {Array.from({ length: 0 }).map((_, i) => (
                         <td key={`empty-${i}`}></td>
                     ))}

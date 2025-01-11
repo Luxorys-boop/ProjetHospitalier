@@ -80,7 +80,7 @@ tbody tr:nth-child(even) {
   background-color: #f1f1f1;
 }
 
-td {
+td, th {
   border: 1px solid #ccc;
   text-align: center;
   padding: 8px;

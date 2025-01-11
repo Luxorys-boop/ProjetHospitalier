@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import TableUser from './TableUser';
 function TableMaker() {
     const [year] = useState(getYear());
     const [month] = useState(getMonth());
@@ -13,8 +14,9 @@ function TableMaker() {
 
         return (
         <tr>
+          <th>ID</th>
             {days.map((day, index) => (
-            <td key={index}>{day}</td>
+            <th key={index}>{day}</th>
             ))}
         </tr>
         );
@@ -26,7 +28,8 @@ function TableMaker() {
       });
         return ( 
         <tr>
-           {weeks.map((week, index) => ( <td key={index} colSpan="7">{week}</td> ))} 
+          <th colSpan={1}></th>
+           {weeks.map((week, index) => ( <th key={index} colSpan="7">{week}</th> ))} 
         </tr>
         ); 
       }
@@ -38,7 +41,7 @@ function TableMaker() {
             <TableRow />
         </thead>
         <tbody class="userTable">
-
+          <TableUser/>
         </tbody>
         </table></>
     );

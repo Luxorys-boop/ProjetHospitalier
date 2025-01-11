@@ -102,6 +102,7 @@ button {
   background-color: #1a1a1a;
   cursor: pointer;
   transition: border-color 0.25s;
+  margin-top: 0.5em;
 }
 button:hover {
   border-color: #646cff;
@@ -158,4 +159,9 @@ button:focus-visible {
 
 .search-box button:hover {
   background-color: #797979;
+}
+
+.tableContainer {
+  padding: 1em;
+  background-color: white;
 }

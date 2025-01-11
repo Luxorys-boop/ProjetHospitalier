@@ -8,17 +8,11 @@ function App() {
   return (
     <>
     <Navbar>
-      <div><button onClick={() => setButtonPopup(true)} class="addButton">Ajouter</button></div>
-      <div><button class="editButton">Editer</button></div>
-      <div><p>Attente</p></div>
-      <div class="search-container"> 
-        <div class="search-box"> 
-            <input type="text" placeholder="Search..."></input> 
-            <button type="submit">Search</button>
-        </div>
-      </div>
     </Navbar>
-    <TableMaker/>
+    <div className='tableContainer'>
+      <TableMaker/>
+      <div><button onClick={() => setButtonPopup(true)} class="addButton">Ajouter</button></div>
+    </div>
 
     <Popup trigger={buttonPopup} setTrigger={setButtonPopup}>
       <h2>Ajout Utilisateur</h2>

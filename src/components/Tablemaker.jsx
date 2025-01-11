@@ -35,15 +35,18 @@ function TableMaker() {
       }
 
     return (
-        <><h3 class="month">{month} {year}</h3><table>
-        <thead >
-            <WeekRow />
-            <TableRow />
-        </thead>
-        <tbody class="userTable">
-          <TableUser/>
-        </tbody>
-        </table></>
+        <>
+          <h3 className="month">{month} {year}</h3><table>
+          <thead >
+              <WeekRow />
+              <TableRow />
+          </thead>
+          <tbody class="userTable">
+            <TableUser/>
+          </tbody>
+          </table>
+        </>
+
     );
 }
 

@@ -11,7 +11,7 @@ const TableUser = ({ daysInMonth, startDay }) => {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({
-                        sql: "SELECT * FROM utilisateurs",
+                        sql: "SELECT * FROM utilisateurs ORDER BY id",
                     }),
                 });
 

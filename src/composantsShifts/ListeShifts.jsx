@@ -1,54 +1,134 @@
 import React, { useState, useEffect } from "react";
+import FormulaireShifts from "./FormulaireShifts"; // Assurez-vous que le chemin est correct
+import "./shifts.css"; // Import du fichier CSS unique
 
-function ListeShifts({ onAjouterShift, onEditerShift }) {
+function ListeShifts() {
   const [shifts, setShifts] = useState([]);
+  const [formulaireOuvert, setFormulaireOuvert] = useState(false);
+  const [shiftActuel, setShiftActuel] = useState(null);
+  const [popupVisible, setPopupVisible] = useState(false);
+  const [shiftASupprimer, setShiftASupprimer] = useState(null);
 
+  // Fonction pour récupérer les shifts depuis l'API
+  const actualiserShifts = async () => {
+    try {
+      const response = await fetch("http://localhost:5001/query", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          sql: "SELECT * FROM shifts",
+        }),
+      });
+      const data = await response.json();
+      setShifts(data);
+    } catch (err) {
+      console.error("Erreur lors de la récupération des shifts :", err);
+    }
+  };
+
+  // Appel de l'API au chargement initial de la page
   useEffect(() => {
-    const recupererShifts = async () => {
-      try {
-        const response = await fetch("http://localhost:5000/query", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            sql: "SELECT * FROM shifts",
-          }),
-        });
-        const data = await response.json();
-        setShifts(data);
-      } catch (err) {
-        console.error("Erreur lors de la récupération :", err);
-      }
-    };
-    recupererShifts();
+    actualiserShifts();
   }, []);
+
+  const ouvrirFormulaire = (shift = null) => {
+    setShiftActuel(shift);
+    setFormulaireOuvert(true);
+  };
+
+  const fermerFormulaire = () => {
+    setFormulaireOuvert(false);
+    actualiserShifts(); // Mise à jour des shifts après fermeture
+  };
+
+  const confirmerSuppression = (id) => {
+    setShiftASupprimer(id);
+    setPopupVisible(true);
+  };
+
+  const annulerSuppression = () => {
+    setPopupVisible(false);
+    setShiftASupprimer(null);
+  };
+
+  const supprimerShift = async () => {
+    if (!shiftASupprimer) return;
+
+    try {
+      const response = await fetch("http://localhost:5001/query", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          sql: "DELETE FROM shifts WHERE id = ?",
+          params: [shiftASupprimer],
+        }),
+      });
+      if (!response.ok) throw new Error("Erreur lors de la suppression.");
+      setShifts((prevShifts) =>
+        prevShifts.filter((shift) => shift.id !== shiftASupprimer)
+      );
+      setPopupVisible(false);
+      setShiftASupprimer(null);
+    } catch (err) {
+      console.error("Erreur lors de la suppression :", err);
+    }
+  };
 
   return (
     <div className="liste-shifts">
       <table>
         <thead>
           <tr>
-            <th>Shift</th>
+            <th>ID</th>
+            <th>Nom</th>
             <th>Heure Début</th>
             <th>Durée</th>
+            <th>Besoin Infirmiers</th>
+            <th>Service ID</th>
             <th>Actions</th>
           </tr>
         </thead>
         <tbody>
           {shifts.map((shift) => (
             <tr key={shift.id}>
+              <td>{shift.id}</td>
               <td>{shift.nom}</td>
               <td>{shift.heure_debut || "Non défini"}</td>
               <td>{shift.duree}</td>
+              <td>{shift.besoin_infirmiers}</td>
+              <td>{shift.service_id}</td>
               <td>
-                <button onClick={() => onEditerShift(shift)}>Modifier</button>
+                <td>
+                  <div className="actions">
+                    <button onClick={() => ouvrirFormulaire(shift)}>Modifier</button>
+                    <button onClick={() => confirmerSuppression(shift.id)}>Supprimer</button>
+                  </div>
+                </td>
+
               </td>
             </tr>
           ))}
         </tbody>
       </table>
-      <button className="ajouter-bouton" onClick={onAjouterShift}>
-        Ajouter Shift
-      </button>
+      {!formulaireOuvert && (
+        <button className="ajouter-bouton" onClick={() => ouvrirFormulaire()}>
+          Ajouter Shift
+        </button>
+      )}
+
+      {formulaireOuvert && (
+        <FormulaireShifts shift={shiftActuel} onFermer={fermerFormulaire} />
+      )}
+
+      {popupVisible && (
+        <div className="popupshifts">
+          <div className="popup-content">
+            <p>Êtes-vous sûr de vouloir supprimer ce shift ?</p>
+            <button onClick={supprimerShift}>Oui</button>
+            <button onClick={annulerSuppression}>Non</button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -3,7 +3,7 @@ import mysql2 from 'mysql2/promise';
 import cors from 'cors';
 
 const app = express();
-const port = 5000;
+const port = 5001;
 
 // Configuration de la base de données
 const config = {
@@ -11,7 +11,7 @@ const config = {
   user: 'root',
   password: '',
   database: 'planning_hospitalier',
-  port: '5001',
+  port: '3306',
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0,

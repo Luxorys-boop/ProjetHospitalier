@@ -9,7 +9,7 @@ function UtilisateursPage() {
     // Fonction pour récupérer tous les utilisateurs
     const handleGetAll = async () => {
         try {
-            const response = await fetch("http://localhost:5000/query", {
+            const response = await fetch("http://localhost:5001/query", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
@@ -31,7 +31,7 @@ function UtilisateursPage() {
     // Fonction pour récupérer un utilisateur par ID
     const handleGetById = async () => {
         try {
-            const response = await fetch("http://localhost:5000/query", {
+            const response = await fetch("http://localhost:5001/query", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
@@ -52,7 +52,7 @@ function UtilisateursPage() {
     // Fonction pour créer un utilisateur
     const handleCreate = async () => {
         try {
-            const response = await fetch("http://localhost:5000/query", {
+            const response = await fetch("http://localhost:5001/query", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
@@ -72,7 +72,7 @@ function UtilisateursPage() {
     // Fonction pour mettre à jour un utilisateur
     const handleUpdate = async () => {
         try {
-            const response = await fetch("http://localhost:5000/query", {
+            const response = await fetch("http://localhost:5001/query", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
@@ -93,7 +93,7 @@ function UtilisateursPage() {
     // Fonction pour supprimer un utilisateur
     const handleDelete = async () => {
         try {
-            const response = await fetch("http://localhost:5000/query", {
+            const response = await fetch("http://localhost:5001/query", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({

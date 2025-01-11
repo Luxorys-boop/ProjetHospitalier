@@ -1,0 +1,233 @@
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4faff; /* Bleu très clair pour le fond */
+    color: #333; /* Texte sombre */
+    margin: 0;
+    padding: 0;
+    line-height: 1.6;
+  }
+  
+  h1, h2 {
+    text-align: center;
+    color: #0056b3; /* Bleu foncé pour les titres */
+  }
+  
+  .liste-cycles {
+    margin: 20px auto;
+    width: 90%;
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    background-color: #ffffff; /* Fond blanc */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  
+  table th,
+  table td {
+    padding: 12px 15px;
+    text-align: center;
+    border-bottom: 1px solid #e6f1ff;
+    font-size: 14px;
+  }
+  
+  table thead {
+    background-color: #0056b3; /* Bleu foncé */
+    color: white; /* Texte blanc */
+  }
+  
+  table tbody tr:nth-child(even) {
+    background-color: #f9f9f9; /* Gris clair */
+  }
+  
+  table tbody tr:hover {
+    background-color: #e6f1ff; /* Bleu clair au survol */
+  }
+  
+  button.ajouter-bouton {
+    background-color: #007bff; /* Bleu vif */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    display: block;
+    margin: 20px auto;
+    font-size: 16px;
+  }
+  
+  button.ajouter-bouton:hover {
+    background-color: #0056b3;
+  }
+  
+  .formulaire-ajout {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+    margin: 20px auto;
+  }
+  
+  .formulaire-ajout h3 {
+    color: #0056b3;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .formulaire-ajout label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #0056b3;
+  }
+  
+  .formulaire-ajout input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  .formulaire-ajout .actions {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .formulaire-ajout .actions button {
+    width: 48%;
+  }
+
+  .formulaire-ajout-cycle {
+    margin: 20px auto;
+    max-width: 900px;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    overflow: scroll;
+  }
+  
+  .controle-semaines {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  
+  
+  .actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+  }
+
+
+  /* Conteneur pour chaque semaine */
+.semaine {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+  }
+  
+  /* Titre de la semaine */
+  .semaine h3 {
+    margin-bottom: 10px;
+    color: #0056b3;
+    font-weight: bold;
+  }
+  
+  /* Styles pour aligner les jours dans une rangée */
+.jours {
+    display: flex;
+    flex-wrap: wrap; /* Permet de passer à la ligne si nécessaire */
+    justify-content: space-between; /* Espacement égal entre les champs */
+    gap: 10px; /* Espacement horizontal entre les champs */
+    margin-bottom: 20px; /* Espacement sous la rangée */
+  }
+  
+  /* Style pour chaque jour */
+  .jour {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centre le label et le select */
+    width: 120px; /* Largeur fixe pour chaque champ */
+  }
+  
+  /* Style du label */
+  .jour label {
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #0056b3; /* Bleu foncé */
+  }
+  
+  /* Style pour les listes déroulantes */
+  .jour select {
+    width: 100%; /* Occupe toute la largeur du conteneur */
+    padding: 8px;
+    font-size: 14px;
+    border: 1px solid #ccc; /* Bordure grise */
+    border-radius: 8px; /* Bord arrondi */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Ombre légère */
+    background-color: #fff; /* Fond blanc */
+    appearance: none; /* Supprime le style natif */
+    cursor: pointer;
+    transition: box-shadow 0.3s ease;
+  }
+  
+  /* Flèche de la liste déroulante */
+  .jour select:after {
+    content: "";
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    border: 6px solid transparent;
+    border-top-color: #ccc;
+  }
+  
+  /* Effet au survol des listes déroulantes */
+  .jour select:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Augmente l'ombre au survol */
+  }
+  
+  /* Effet lorsqu'un élément est sélectionné */
+  .jour select:focus {
+    border-color: #007bff; /* Bordure bleue au focus */
+    outline: none;
+    box-shadow: 0 0 4px rgba(0, 123, 255, 0.8);
+  }
+  
+  /* Alignement des semaines */
+  .semaine {
+    margin-bottom: 20px; /* Espacement entre les semaines */
+  }
+  
+  /* Style pour les boutons */
+  .actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+  }
+  
+  .actions button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .actions button:hover {
+    background-color: #0056b3;
+  }

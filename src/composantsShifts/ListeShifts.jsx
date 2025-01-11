@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import FormulaireShifts from "./FormulaireShifts"; // Assurez-vous que le chemin est correct
-import "./shifts.css"; // Import du fichier CSS unique
+import FormulaireShifts from "./FormulaireShifts";
+import "./shifts.css";
 
 function ListeShifts() {
   const [shifts, setShifts] = useState([]);
@@ -16,7 +16,7 @@ function ListeShifts() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          sql: "SELECT * FROM shifts",
+          sql: "SELECT * FROM shifts ORDER BY id",
         }),
       });
       const data = await response.json();

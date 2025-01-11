@@ -9,7 +9,7 @@ const port = 5001;
 const config = {
   host: 'localhost',
   user: 'root',
-  password: 'root',
+  password: '',
   database: 'planning_hospitalier',
   port: '3306',
   waitForConnections: true,

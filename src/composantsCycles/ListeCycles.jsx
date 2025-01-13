@@ -78,7 +78,7 @@ function ListeCycles({ onAjouterCycle }) {
               <tr key={cycleId}>
                 <td>{cycleId}</td>
                 {Array.from({ length: maxJours }).map((_, index) => (
-                  <td key={index}>{cycleShifts[cycleId][index] || "RH"}</td>
+                  <td key={index}>{cycleShifts[cycleId][index] || "Aucun"}</td>
                 ))}
               </tr>
             ))

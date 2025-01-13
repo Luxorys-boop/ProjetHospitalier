@@ -104,6 +104,7 @@ function FormulaireAjoutCycle({ onFermer }) {
                         onChange={(e) =>
                           handleJourChange(globalJourIndex, e.target.value)
                         }
+                        required
                       >
                         <option value="">-- Options --</option>
                         {shifts.map((shift) => (

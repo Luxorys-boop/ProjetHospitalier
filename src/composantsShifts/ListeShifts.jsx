@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import FormulaireShifts from "./FormulaireShifts";
 
-
 function ListeShifts() {
   const [shifts, setShifts] = useState([]);
   const [formulaireOuvert, setFormulaireOuvert] = useState(false);
@@ -105,24 +104,32 @@ function ListeShifts() {
           ))}
         </tbody>
       </table>
-      {!formulaireOuvert && (
-        <button className="ajouter-shifts-bouton" onClick={() => ouvrirFormulaire()}>
-          Ajouter Shift
-        </button>
-      )}
+      <button className="ajouter-shifts-bouton" onClick={() => ouvrirFormulaire()}>
+        Ajouter Shift
+      </button>
 
       {formulaireOuvert && (
-        <FormulaireShifts shift={shiftActuel} onFermer={fermerFormulaire} />
+        <>
+          <div className="backdrop" onClick={fermerFormulaire}></div>
+          <div className="popupshifts">
+            <div className="popup-content">
+              <FormulaireShifts shift={shiftActuel} onFermer={fermerFormulaire} />
+            </div>
+          </div>
+        </>
       )}
 
       {popupVisible && (
-        <div className="popupshifts">
-          <div className="popup-content">
-            <p>Êtes-vous sûr de vouloir supprimer ce shift ?</p>
-            <button onClick={supprimerShift}>Oui</button>
-            <button onClick={annulerSuppression}>Non</button>
+        <>
+          <div className="backdrop" onClick={annulerSuppression}></div>
+          <div className="popupshifts">
+            <div className="popup-content">
+              <p>Êtes-vous sûr de vouloir supprimer ce shift ?</p>
+              <button onClick={supprimerShift}>Oui</button>
+              <button onClick={annulerSuppression}>Non</button>
+            </div>
           </div>
-        </div>
+        </>
       )}
     </div>
   );

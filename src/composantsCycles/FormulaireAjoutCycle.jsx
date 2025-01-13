@@ -80,53 +80,55 @@ function FormulaireAjoutCycle({ onFermer }) {
   };
 
   return (
-    <div className="formulaire-ajout-cycle">
-      <h2>Ajouter un Nouveau Cycle</h2>
-      <div className="controle-semaines">
-        <button onClick={() => handleSemainesChange(-1)}>-</button>
-        <span>{nombreSemaines} semaine(s)</span>
-        <button onClick={() => handleSemainesChange(1)}>+</button>
-      </div>
-
-      <form onSubmit={handleSubmit}>
-        {[...Array(nombreSemaines)].map((_, semaineIndex) => (
-          <div key={semaineIndex} className="semaine">
-            <h3>Semaine {semaineIndex + 1}</h3>
-            <br></br>
-            <div className="jours">
-              {[...Array(7)].map((_, jourIndex) => {
-                const globalJourIndex = semaineIndex * 7 + jourIndex;
-                return (
-                  <div key={globalJourIndex} className="jour">
-                    <label>Jour {globalJourIndex + 1} :</label>
-                    <select
-                      value={jours[globalJourIndex] || ""}
-                      onChange={(e) => handleJourChange(globalJourIndex, e.target.value)}
-                      required
-                    >
-                      <option value="">-- Options --</option>
-                      {shifts.map((shift) => (
-                        <option key={shift.id} value={shift.id}>
-                          {shift.nom}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        ))}
-
-        <div className="actions">
-          <button type="submit">Valider</button>
-          <button type="button" onClick={onFermer}>
-            Annuler
-          </button>
+    <>
+      <div className="backdrop" onClick={onFermer}></div>
+      <div className="formulaire-ajout-cycle">
+        <h2>Ajouter un Nouveau Cycle</h2>
+        <div className="controle-semaines">
+          <button onClick={() => handleSemainesChange(-1)}>-</button>
+          <span>{nombreSemaines} Semaine(s)</span>
+          <button onClick={() => handleSemainesChange(1)}>+</button>
         </div>
-      </form>
-    </div>
+        <form onSubmit={handleSubmit}>
+          {[...Array(nombreSemaines)].map((_, semaineIndex) => (
+            <div key={semaineIndex} className="semaine">
+              <h3>Semaine {semaineIndex + 1}</h3>
+              <div className="jours">
+                {[...Array(7)].map((_, jourIndex) => {
+                  const globalJourIndex = semaineIndex * 7 + jourIndex;
+                  return (
+                    <div key={globalJourIndex} className="jour">
+                      <label>Jour {globalJourIndex + 1} :</label>
+                      <select
+                        value={jours[globalJourIndex] || ""}
+                        onChange={(e) =>
+                          handleJourChange(globalJourIndex, e.target.value)
+                        }
+                      >
+                        <option value="">-- Options --</option>
+                        {shifts.map((shift) => (
+                          <option key={shift.id} value={shift.id}>
+                            {shift.nom}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          ))}
+          <div className="actions-cycles">
+            <button type="submit">Valider</button>
+            <button type="button" onClick={onFermer}>
+              Annuler
+            </button>
+          </div>
+        </form>
+      </div>
+    </>
   );
+  
 }
 
 export default FormulaireAjoutCycle;

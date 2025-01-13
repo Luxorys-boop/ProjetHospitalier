@@ -55,7 +55,7 @@ function ListeCycles({ onAjouterCycle }) {
 
   return (
     <div className="liste-cycles">
-      <h2>Gestion des cycles de travail</h2>
+      <h1>Gestion des cycles de travail</h1>
 
       {error && <p className="error-message">{error}</p>}
 
@@ -78,7 +78,7 @@ function ListeCycles({ onAjouterCycle }) {
               <tr key={cycleId}>
                 <td>{cycleId}</td>
                 {Array.from({ length: maxJours }).map((_, index) => (
-                  <td key={index}>{cycleShifts[cycleId][index] || "Aucun"}</td>
+                  <td key={index}>{cycleShifts[cycleId][index] || "RH"}</td>
                 ))}
               </tr>
             ))
@@ -86,7 +86,7 @@ function ListeCycles({ onAjouterCycle }) {
         </tbody>
       </table>
 
-      <button className="ajouter-bouton" onClick={onAjouterCycle}>
+      <button className="ajouter-cycles-bouton" onClick={onAjouterCycle}>
         Ajouter Cycle
       </button>
     </div>

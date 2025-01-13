@@ -1,0 +1,133 @@
+
+/* Styles de base pour .tablemaker */
+.tablemaker {
+    font-family: 'Arial', sans-serif;
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin-top: 20px;
+    background-color: #ffffff; /* Fond blanc */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  
+  /* Styles pour les cellules générales */
+  .tablemaker th,
+  .tablemaker td {
+    padding: 12px 15px;
+    text-align: center;
+    border-bottom: 1px solid #ccc; /* Bordure subtile */
+  }
+  
+  /* Styles pour les lignes et colonnes */
+  .tablemaker th {
+    background-color: #cce7ff; /* Bleu clair */
+    color: #333; /* Texte bleu sombre */
+    font-weight: bold;
+    text-transform: uppercase;
+  }
+  
+  .tablemaker tr:nth-child(even) {
+    background-color: #eaf4ff; /* Bleu très clair */
+  }
+  
+  .tablemaker tr:hover {
+    background-color: #d6eaff; /* Bleu clair au survol */
+  }
+  
+  /* Titre du tableau */
+  .tablemaker-title {
+    background-color: #cce7ff; /* Bleu principal */
+    color: black;
+    font-size: 18px;
+    text-align: center;
+    text-transform: capitalize;
+    padding: 10px 0;
+    margin: 0;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+  }
+  
+  /* Styles spécifiques aux en-têtes */
+  .tablemaker thead tr:first-child th {
+    background-color: #cce7ff; /* Bleu principal */
+    color: #ffffff; /* Texte blanc */
+    font-size: 18px;
+    text-transform: capitalize;
+    border-bottom: none;
+  }
+  
+  .tablemaker thead tr:nth-child(2) th {
+    background-color: #f8faff; /* Fond bleu très clair */
+    color: #333; /* Texte sombre */
+    font-size: 14px;
+    font-weight: bold;
+    border-left: 1px solid #ccc; /* Bordures entre les semaines */
+  }
+  
+  .tablemaker thead tr:nth-child(2) th:first-child {
+    border-left: none; /* Pas de bordure à gauche */
+  }
+  
+  .tablemaker thead tr:nth-child(2) th:last-child {
+    border-right: none; /* Pas de bordure à droite */
+  }
+  
+  .tablemaker thead tr:nth-child(3) th {
+    background-color: #cce7ff; /* Bleu clair */
+    color: #333; /* Texte sombre */
+    font-size: 12px;
+    font-weight: bold;
+    border-left: 1px solid #ccc; /* Bordures internes */
+  }
+  
+  .tablemaker thead tr:nth-child(3) th:first-child {
+    border-left: none; /* Pas de bordure à gauche */
+  }
+  
+  .tablemaker thead tr:nth-child(3) th:last-child {
+    border-right: none; /* Pas de bordure à droite */
+  }
+  
+  /* Styles spécifiques pour le tbody */
+  .tablemaker tbody {
+    font-size: 14px;
+    color: #333; /* Texte sombre */
+  }
+  
+  .tablemaker tbody tr td {
+    border-left: 1px solid #ccc; /* Bordures internes */
+  }
+  
+  .tablemaker tbody tr td:first-child {
+    border-left: none; /* Pas de bordure à gauche */
+  }
+  
+  .tablemaker tbody tr td:last-child {
+    border-right: none; /* Pas de bordure à droite */
+  }
+  
+  .containerButtons button {
+    padding: 10px 20px;
+    margin-top: 25px;
+    background-color: #007bff;
+    /* Bleu principal */
+    color: #ffffff;
+    /* Texte blanc */
+    border: none;
+    border-radius: 5px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    margin-inline: 10px;
+  }
+  
+  .containerButtons button:hover {
+    background-color: #0056b3;
+    /* Bleu légèrement plus foncé */
+    transform: translateY(-2px);
+  }
+  
+  

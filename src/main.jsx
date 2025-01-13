@@ -9,6 +9,7 @@ import AppCycles from './composantsCycles/AppCycles.jsx'
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <App />
+    <AppShifts />
     <AppCycles/>
   </StrictMode>,
 )

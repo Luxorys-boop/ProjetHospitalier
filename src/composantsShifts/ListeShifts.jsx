@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import FormulaireShifts from "./FormulaireShifts";
-import "./shifts.css";
+
 
 function ListeShifts() {
   const [shifts, setShifts] = useState([]);
@@ -96,7 +96,7 @@ function ListeShifts() {
               <td>{shift.duree}</td>
               <td>{shift.besoin_infirmiers}</td>
               <td>
-                <div className="actions">
+                <div className="actions-shifts">
                   <button onClick={() => ouvrirFormulaire(shift)}>Modifier</button>
                   <button onClick={() => confirmerSuppression(shift.id)}>Supprimer</button>
                 </div>
@@ -106,7 +106,7 @@ function ListeShifts() {
         </tbody>
       </table>
       {!formulaireOuvert && (
-        <button className="ajouter-bouton" onClick={() => ouvrirFormulaire()}>
+        <button className="ajouter-shifts-bouton" onClick={() => ouvrirFormulaire()}>
           Ajouter Shift
         </button>
       )}

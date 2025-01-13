@@ -87,7 +87,7 @@ function FormulaireShifts({ shift, onFermer }) {
             onChange={(e) => setBesoinInfirmiers(e.target.value)}
           />
         </div>
-        <div className="confirm-boutons">
+        <div className="confirm-shifts-boutons">
           <button type="submit">Valider</button>
           <button type="button" onClick={onFermer}>
             Annuler

@@ -1,0 +1,93 @@
+@import url('https://fonts.googleapis.com/css2?family=Jua&display=swap');
+
+
+/* Conteneur principal */
+.hamburger-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  
+}
+
+/* Icône hamburger */
+.hamburger-icon {
+  font-size: 30px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #0056b3; /* Bleu foncé */
+  padding: 10px;
+  transition: transform 0.3s ease;
+}
+
+.hamburger-icon:hover {
+  transform: scale(1.1);
+}
+
+/* Menu latéral */
+.menu-sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 250px;
+  height: 100%;
+  background-color: #f4faff; /* Bleu clair */
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 4px;
+  transition: transform 0.3s ease;
+}
+
+/* Icône de fermeture */
+.close-icon {
+  font-size: 20px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #0056b3;
+  align-self: flex-end;
+  margin-bottom: 20px;
+  font-family: 'jua';
+  margin-right: 0;
+  margin-top: 10px;
+  
+}
+
+.close-icon:hover {
+  transform: scale(1.1);
+}
+
+/* Liste des liens */
+.menu-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  text-align: center;
+  
+}
+
+.menu-list li {
+  margin-bottom: 15px;
+}
+
+.menu-list li a {
+  text-decoration: none;
+  color: #0056b3; /* Bleu foncé */
+  font-size: 18px;
+  padding: 10px;
+  border-radius: 5px;
+  display: block;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  font-weight: bold;    
+
+}
+
+.menu-list li a:hover {
+  background-color: #e6f1ff; /* Bleu clair */
+  color: #003d80; /* Bleu plus foncé */
+}

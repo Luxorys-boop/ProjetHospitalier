@@ -1,0 +1,9 @@
+.layout {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .content {
+    padding: 20px;
+    margin-top: 60px; 
+  }

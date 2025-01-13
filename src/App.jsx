@@ -4,10 +4,13 @@ import Popup from './components/Popup';
 import Navbar from './components/Navbar';
 import UtilisateursPage from './components/Utilisateurs';
 import RemoveSelected from './components/RemoveSelected'
+import Layout from "./Layout"; 
+
 function App() {
   const [buttonPopup, setButtonPopup] = useState(false);
   return (
-    <>
+    
+    <Layout>
     <Navbar>
     </Navbar>
     <div className='tableContainer'>
@@ -24,8 +27,7 @@ function App() {
       <UtilisateursPage/>
     </Popup>
 
-
-    </>
+    </Layout>
   );
 }
 

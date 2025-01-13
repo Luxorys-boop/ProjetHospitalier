@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import ListeShifts from "./ListeShifts.jsx";
 import FormulaireShifts from "./FormulaireShifts.jsx";
 import "./shifts.css";
+import Layout from "../Layout"; 
+
 
 function AppShifts() {
   const [formulaireVisible, setFormulaireVisible] = useState(false);
@@ -22,6 +24,7 @@ function AppShifts() {
   };
 
   return (
+    <Layout>
     <div className="appshifts">
       <h1>Gestion des Shifts</h1>
       <ListeShifts onAjouterShift={handleAjouterShift} onEditerShift={handleEditerShift} />
@@ -29,6 +32,7 @@ function AppShifts() {
         <FormulaireShifts shift={shiftEdition} onFermer={handleFermerFormulaire} />
       )}
     </div>
+    </Layout>
   );
 }
 

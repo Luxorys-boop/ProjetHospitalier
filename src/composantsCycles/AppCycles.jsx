@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import ListeCycles from "./ListeCycles.jsx";
 import FormulaireAjoutCycle from "./FormulaireAjoutCycle.jsx";
+import Layout from "../Layout"; 
 import "./Cycles.css";
 
 function AppCycles() {
@@ -16,11 +17,9 @@ function AppCycles() {
   };
 
   return (
-    <div className="cycle-app-container"> {/* Le nom de classe a été repris de l'ancienne version */}
+    <div className="appcycles">
       <ListeCycles onAjouterCycle={handleAjouterCycle} />
-      {formulaireVisible && (
-        <FormulaireAjoutCycle onFermer={handleFermerFormulaire} />
-      )}
+      {formulaireVisible && <FormulaireAjoutCycle onFermer={handleFermerFormulaire} />}
     </div>
   );
 }

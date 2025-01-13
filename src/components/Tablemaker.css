@@ -107,6 +107,8 @@
   .tablemaker tbody tr td:last-child {
     border-right: none; /* Pas de bordure à droite */
   }
+
+  
   
   .containerButtons button {
     padding: 10px 20px;
@@ -130,4 +132,25 @@
     transform: translateY(-2px);
   }
   
+  .tableContainer {
+    max-height: 664px;
+    overflow-y: auto;
+  }
+  
+  .tablemaker {
+    width: 100%;
+    
+  }
+  
+  thead {
+    position: sticky;
+    top: 0;
+    background-color: white;
+    z-index: 1;
+  }
+  
+  th, td {
+    padding: 8px;
+    text-align: left;
+  }
   

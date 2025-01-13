@@ -6,6 +6,7 @@ import "./Cycles.css";
 function AppCycles() {
   const [formulaireVisible, setFormulaireVisible] = useState(false);
 
+  // Gestion de l'affichage du formulaire
   const handleAjouterCycle = () => {
     setFormulaireVisible(true);
   };
@@ -15,9 +16,11 @@ function AppCycles() {
   };
 
   return (
-    <div className="appcycles">
+    <div className="cycle-app-container"> {/* Le nom de classe a été repris de l'ancienne version */}
       <ListeCycles onAjouterCycle={handleAjouterCycle} />
-      {formulaireVisible && <FormulaireAjoutCycle onFermer={handleFermerFormulaire} />}
+      {formulaireVisible && (
+        <FormulaireAjoutCycle onFermer={handleFermerFormulaire} />
+      )}
     </div>
   );
 }

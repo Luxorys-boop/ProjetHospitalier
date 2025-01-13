@@ -54,32 +54,49 @@
   transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
-.actions-cycles button {
-  background-color: #007bff;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 16px;
-  font-weight: bold;
-  transition: background-color 0.3s ease, transform 0.2s ease;
-  margin-inline: 10px;
-}
-
-.ajouter-cycles-bouton:hover,
-.actions-cycles button:hover {
+.ajouter-cycles-bouton:hover {
   background-color: #0056b3;
   transform: translateY(-2px);
 }
 
+/* Conteneur des boutons Modifier et Supprimer */
+.actions-cycles {
+  display: flex;
+  justify-content: center; /* Aligne les boutons horizontalement */
+  gap: 10px; /* Espacement entre les boutons */
+}
+
+/* Boutons Modifier et Supprimer */
+.actions-cycles button {
+  padding: 10px 20px; /* Taille des boutons */
+  border: none; /* Supprime les bordures */
+  border-radius: 5px; /* Coins arrondis */
+  font-size: 14px; /* Taille du texte */
+  font-weight: bold; /* Texte en gras */
+  cursor: pointer; /* Curseur interactif */
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+/* Bouton Modifier */
+.actions-cycles button:first-of-type {
+  background-color: #007bff; /* Bleu principal */
+  color: white; /* Texte blanc */
+}
+
+.actions-cycles button:first-of-type:hover {
+  background-color: #0056b3; /* Bleu plus foncé au survol */
+  transform: translateY(-2px); /* Léger effet de soulèvement */
+}
+
+/* Bouton Supprimer */
 .actions-cycles button:last-of-type {
-  background-color: #cce7ff;
-  color: #003366;
+  background-color: #cce7ff; /* Bleu clair */
+  color: #003366; /* Texte bleu sombre */
 }
 
 .actions-cycles button:last-of-type:hover {
-  background-color: #a3c8ff;
+  background-color: #a3c8ff; /* Bleu moyen au survol */
+  transform: translateY(-2px); /* Léger effet de soulèvement */
 }
 
 /* Superposition (backdrop) */
@@ -235,3 +252,4 @@
 .formulaire-ajout-cycle .actions button:last-of-type:hover {
   background-color: #cce7ff;
 }
+

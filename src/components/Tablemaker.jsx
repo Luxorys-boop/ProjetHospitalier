@@ -38,7 +38,7 @@ function TableMaker() {
 
   return (
     <table className="tablemaker">
-      <thead>
+      <thead className='theadmaker'>
         <tr>
           <th colSpan="100%">
             <h3 className="tablemaker-title">{month} {year}</h3>

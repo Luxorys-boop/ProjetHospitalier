@@ -115,17 +115,18 @@ function UtilisateursPage() {
         <div>
             {/* Formulaire pour les champs */}
             <div>
-                <label>Nom :</label>
+                <label>
                 <input
                     type="text"
                     value={nom}
                     onChange={(e) => setNom(e.target.value)}
                     placeholder="Nom de l'utilisateur"
                 />
+                </label>
             </div>
 
             {/* Boutons pour les opérations CRUD */}
-            <div>
+            <div className="containerButtons">
                 <button onClick={handleGetAll}>Get All</button>
                 <button onClick={handleCreate}>Create</button>
                 

@@ -37,9 +37,9 @@ function RemoveButton() {
   };
 
   return (
-    <div>
+    <>
       <button onClick={handleRemoveSelected}>Remove Selected</button>
-    </div>
+    </>
   );
 }
 

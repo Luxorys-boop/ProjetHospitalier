@@ -15,12 +15,16 @@ function App() {
     </Navbar>
     <div className='tableContainer'>
       <TableMaker/>
-      <div className='containerButtons'>
-        <button onClick={() => setButtonPopup(true)} class="addButton">Ajouter</button>
+
+    </div>
+    <div className='containerButtons'>
+        <button onClick={() => {
+          setButtonPopup(true);
+          let title = document.getElementsByClassName("theadmaker")[0]
+          title.style.position = "inherit";
+          }} class="addButton">Ajouter</button>
         <RemoveSelected></RemoveSelected>
       </div>
-      
-    </div>
 
     <Popup trigger={buttonPopup} setTrigger={setButtonPopup}>
       <h2>Ajout Utilisateur</h2>

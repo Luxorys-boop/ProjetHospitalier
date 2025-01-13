@@ -17,10 +17,12 @@ function AppCycles() {
   };
 
   return (
+    <Layout>
     <div className="appcycles">
       <ListeCycles onAjouterCycle={handleAjouterCycle} />
       {formulaireVisible && <FormulaireAjoutCycle onFermer={handleFermerFormulaire} />}
     </div>
+    </Layout>
   );
 }
 

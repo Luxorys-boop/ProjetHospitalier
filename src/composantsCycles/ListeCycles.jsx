@@ -21,15 +21,17 @@ function ListeCycles({ onAjouterCycle }) {
           body: JSON.stringify({
             sql: `
               SELECT
-                cs.cycle_id,
+                c.nom_cycle AS cycle_nom,
                 cs.jour,
                 s.nom AS shift_nom
               FROM
                 cycle_shifts cs
               JOIN
                 shifts s ON cs.shift_id = s.id
+              JOIN
+                cycles c ON cs.cycle_id = c.id
               ORDER BY
-                cs.cycle_id, cs.jour
+                c.nom_cycle, cs.jour
             `,
           }),
         });
@@ -40,11 +42,11 @@ function ListeCycles({ onAjouterCycle }) {
 
         const data = await response.json();
 
-        // Regrouper les données par cycle_id et déterminer le nombre maximal de jours
+        // Regrouper les données par cycle_nom et déterminer le nombre maximal de jours
         let maxDays = 0;
         const groupedCycles = data.reduce((acc, curr) => {
-          if (!acc[curr.cycle_id]) acc[curr.cycle_id] = [];
-          acc[curr.cycle_id][curr.jour - 1] = curr.shift_nom; // Remplit les jours dans le bon ordre
+          if (!acc[curr.cycle_nom]) acc[curr.cycle_nom] = [];
+          acc[curr.cycle_nom][curr.jour - 1] = curr.shift_nom; // Remplit les jours dans le bon ordre
           if (curr.jour > maxDays) maxDays = curr.jour; // Met à jour le nombre maximum de jours
           return acc;
         }, {});
@@ -61,9 +63,9 @@ function ListeCycles({ onAjouterCycle }) {
   }, []);
 
   // Gérer l'ouverture du pop-up de modification
-  const modifierCycle = (cycleId) => {
-    const cycle = cycleShifts[cycleId];
-    setCycleActuel(cycleId);
+  const modifierCycle = (cycleNom) => {
+    const cycle = cycleShifts[cycleNom];
+    setCycleActuel(cycleNom);
     setFormData([...cycle]);
     setPopupVisible(true);
   };
@@ -91,7 +93,11 @@ function ListeCycles({ onAjouterCycle }) {
                 FROM shifts
                 WHERE nom = ?
               )
-              WHERE cycle_id = ? AND jour = ?;
+              WHERE cycle_id = (
+                SELECT id
+                FROM cycles
+                WHERE nom_cycle = ?
+              ) AND jour = ?;
             `,
             params: [shiftNom, cycleActuel, jour],
           }),
@@ -112,15 +118,17 @@ function ListeCycles({ onAjouterCycle }) {
   };
 
   // Supprimer un cycle
-  const supprimerCycle = async (cycleId) => {
+  const supprimerCycle = async (cycleNom) => {
     try {
       // Supprimer les shifts associés au cycle
       await fetch("http://localhost:5001/query", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          sql: `DELETE FROM cycle_shifts WHERE cycle_id = ?;`,
-          params: [cycleId],
+          sql: `DELETE FROM cycle_shifts WHERE cycle_id = (
+            SELECT id FROM cycles WHERE nom_cycle = ?
+          );`,
+          params: [cycleNom],
         }),
       });
 
@@ -129,13 +137,13 @@ function ListeCycles({ onAjouterCycle }) {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          sql: `DELETE FROM cycles WHERE id = ?;`,
-          params: [cycleId],
+          sql: `DELETE FROM cycles WHERE nom_cycle = ?;`,
+          params: [cycleNom],
         }),
       });
 
       const newCycleShifts = { ...cycleShifts };
-      delete newCycleShifts[cycleId];
+      delete newCycleShifts[cycleNom];
       setCycleShifts(newCycleShifts);
       setConfirmDelete(null);
     } catch (err) {
@@ -153,7 +161,7 @@ function ListeCycles({ onAjouterCycle }) {
       <table>
         <thead>
           <tr>
-            <th>Cycle ID</th>
+            <th>Nom du Cycle</th>
             {Array.from({ length: maxJours }).map((_, index) => (
               <th key={index}>Jour {index + 1}</th>
             ))}
@@ -166,15 +174,15 @@ function ListeCycles({ onAjouterCycle }) {
               <td colSpan={maxJours + 2}>Aucune donnée disponible</td>
             </tr>
           ) : (
-            Object.keys(cycleShifts).map((cycleId) => (
-              <tr key={cycleId}>
-                <td>{cycleId}</td>
+            Object.keys(cycleShifts).map((cycleNom) => (
+              <tr key={cycleNom}>
+                <td>{cycleNom}</td>
                 {Array.from({ length: maxJours }).map((_, index) => (
-                  <td key={index}>{cycleShifts[cycleId][index] || "Aucun"}</td>
+                  <td key={index}>{cycleShifts[cycleNom][index] || "Aucun"}</td>
                 ))}
                 <td className="actions-cycles">
-                  <button onClick={() => modifierCycle(cycleId)}>Modifier</button>
-                  <button onClick={() => setConfirmDelete(cycleId)}>Supprimer</button>
+                  <button onClick={() => modifierCycle(cycleNom)}>Modifier</button>
+                  <button onClick={() => setConfirmDelete(cycleNom)}>Supprimer</button>
                 </td>
               </tr>
             ))

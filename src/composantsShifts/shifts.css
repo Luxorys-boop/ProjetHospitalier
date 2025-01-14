@@ -12,6 +12,7 @@
 .liste-shifts th,
 .liste-shifts td {
   padding: 12px 15px;
+  text-align: center;
 }
 
 .liste-shifts th {
@@ -30,7 +31,6 @@
 
 .liste-shifts td {
   border-bottom: 1px solid #ccc; /* Bordure subtile */
-  text-align: center;
 }
 
 /* Bouton d'ajout */

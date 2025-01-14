@@ -5,6 +5,7 @@ import Navbar from './components/Navbar';
 import UtilisateursPage from './components/Utilisateurs';
 import RemoveSelected from './components/RemoveSelected'
 import Layout from "./Layout"; 
+import Filler from './components/Filler';
 
 function App() {
   const [buttonPopup, setButtonPopup] = useState(false);
@@ -22,15 +23,14 @@ function App() {
           setButtonPopup(true);
           let title = document.getElementsByClassName("theadmaker")[0]
           title.style.position = "inherit";
-          }} class="addButton">Ajouter</button>
+          }} className="addButton">Ajouter</button>
         <RemoveSelected></RemoveSelected>
-      </div>
-
+    </div>
+        
     <Popup trigger={buttonPopup} setTrigger={setButtonPopup}>
       <h2>Ajout Utilisateur</h2>
       <UtilisateursPage/>
     </Popup>
-
     </Layout>
   );
 }

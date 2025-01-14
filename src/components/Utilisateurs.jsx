@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-
+import Option from "./Option";
 function UtilisateursPage() {
     const [id, setId] = useState("");
+    const [cycle_id, setCycleID] = useState("");
     const [nom, setNom] = useState("");
     const [result, setResult] = useState(null);
     const [error, setError] = useState(null);
@@ -52,19 +53,27 @@ function UtilisateursPage() {
     // Fonction pour créer un utilisateur
     const handleCreate = async () => {
         try {
+            if (!cycle_id) { 
+                throw new Error("Erreur lors de la création.");
+            }
             const response = await fetch("http://localhost:5001/query", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
-                    sql: "INSERT INTO utilisateurs (nom) VALUES (?)",
-                    params: [nom],
+                    sql: "INSERT INTO utilisateurs (nom, cycle_id) VALUES (?, ?)",
+                    params: [nom, cycle_id],
                 }),
             });
 
-            if (!response.ok) throw new Error("Erreur lors de la création.");
+            if (!response.ok) {
+                throw new Error("Erreur lors de la création.");
+            } 
+            
             setResult("Utilisateur créé avec succès !");
             setError(null);
         } catch (err) {
+            console.log(err);
+            alert('Veuillez sélectionner un cycle avant de continuer.'); 
             setError(err.message);
         }
     };
@@ -123,12 +132,16 @@ function UtilisateursPage() {
                     placeholder="Nom de l'utilisateur"
                 />
                 </label>
+                
             </div>
 
             {/* Boutons pour les opérations CRUD */}
             <div className="containerButtons">
                 <button onClick={handleGetAll}>Get All</button>
                 <button onClick={handleCreate}>Create</button>
+                <select onChange={(e) => setCycleID(e.target.value)}>
+                    <Option></Option>
+                </select>
                 
             </div>
 

@@ -52,7 +52,7 @@ const Filler = () => {
     };
 
     fetchUsersCycles();
-  }, []);
+  }, );
 
   const extendCycleToNDays = (cycle, n) => {
     const extendedCycle = [];
@@ -72,7 +72,6 @@ const Filler = () => {
             });
         });
         return cycleUserExtended
-    console.log(cycleUserExtended);
     console.log("FIN");
     }
     
@@ -84,6 +83,7 @@ const Filler = () => {
       Array.from(docs).forEach(doc => {
         let tbody = doc.childNodes;
         let usersCycle = adaptToInsert(31);
+        
         for (let x = 0; x < tbody.length; x++) {
           for (let i = 1; i < tbody[x].childNodes.length; i++) {
             let p = document.createElement("p");
@@ -92,7 +92,6 @@ const Filler = () => {
                 if(p.textContent === "") {
                     p.textContent = "RH";
                 }
-                console.log(p);
                 tbody[x].childNodes[i].appendChild(p);
             }
           }

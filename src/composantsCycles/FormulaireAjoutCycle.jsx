@@ -4,7 +4,7 @@ function FormulaireAjoutCycle({ onFermer }) {
   const [nombreSemaines, setNombreSemaines] = useState(1);
   const [shifts, setShifts] = useState([]);
   const [jours, setJours] = useState([]); // Tableau pour stocker les choix de chaque jour
-  const [cycleId, setCycleId] = useState(null); // Stocker l'ID du cycle créé
+  const [nomCycle, setNomCycle] = useState(""); // Stocker le nom du cycle
 
   useEffect(() => {
     // Charger les shifts pour la liste déroulante
@@ -42,20 +42,24 @@ function FormulaireAjoutCycle({ onFermer }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (!nomCycle.trim()) {
+      alert("Veuillez saisir un nom pour le cycle.");
+      return;
+    }
+
     try {
       // Étape 1 : Insérer le cycle
       const cycleResponse = await fetch("http://localhost:5001/query", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          sql: "INSERT INTO cycles (duree_weeks) VALUES (?)",
-          params: [nombreSemaines],
+          sql: "INSERT INTO cycles (nom_cycle, duree_weeks) VALUES (?, ?)",
+          params: [nomCycle, nombreSemaines],
         }),
       });
 
       const cycleData = await cycleResponse.json();
       const nouveauCycleId = cycleData.insertId;
-      setCycleId(nouveauCycleId);
 
       // Étape 2 : Insérer les shifts pour chaque jour
       for (let i = 0; i < jours.length; i++) {
@@ -84,12 +88,21 @@ function FormulaireAjoutCycle({ onFermer }) {
       <div className="backdrop" onClick={onFermer}></div>
       <div className="formulaire-ajout-cycle">
         <h2>Ajouter un Nouveau Cycle</h2>
-        <div className="controle-semaines">
-          <button onClick={() => handleSemainesChange(-1)}>-</button>
-          <span>{nombreSemaines} Semaine(s)</span>
-          <button onClick={() => handleSemainesChange(1)}>+</button>
-        </div>
         <form onSubmit={handleSubmit}>
+          <div className="nom-cycle">
+            <label>Nom du Cycle</label>
+            <input
+              type="text"
+              value={nomCycle}
+              onChange={(e) => setNomCycle(e.target.value)}
+              required
+            />
+          </div>
+          <div className="controle-semaines">
+            <button type="button" onClick={() => handleSemainesChange(-1)}>-</button>
+            <span>{nombreSemaines} Semaine(s)</span>
+            <button type="button" onClick={() => handleSemainesChange(1)}>+</button>
+          </div>
           {[...Array(nombreSemaines)].map((_, semaineIndex) => (
             <div key={semaineIndex} className="semaine">
               <h3>Semaine {semaineIndex + 1}</h3>
@@ -128,7 +141,6 @@ function FormulaireAjoutCycle({ onFermer }) {
       </div>
     </>
   );
-  
 }
 
 export default FormulaireAjoutCycle;

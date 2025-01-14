@@ -253,3 +253,25 @@
   background-color: #cce7ff;
 }
 
+.nom-cycle input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #cce7ff; /* Bordure bleu clair */
+  border-radius: 5px;
+  box-sizing: border-box;
+  font-size: 14px;
+  background-color: #f9f9ff; /* Fond légèrement bleu */
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.nom-cycle input::placeholder {
+  color: #a3c8ff; /* Placeholders bleu pâle */
+}
+
+.nom-cycle input:focus {
+  outline: none;
+  border-color: #007bff; /* Bordure bleu vif */
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+  background-color: #ffffff; /* Fond blanc au focus */
+}

@@ -3,6 +3,7 @@ import Popup from "../components/Popup.jsx";
 
 function ListeCycles({ onAjouterCycle }) {
   const [cycleShifts, setCycleShifts] = useState({});
+  const [cycleNames, setCycleNames] = useState({}); // Associe cycle_id à cycle_nom
   const [error, setError] = useState(null);
   const [maxJours, setMaxJours] = useState(0); // Stocke le nombre maximum de jours
   const [cycleActuel, setCycleActuel] = useState(null); // Pour modification
@@ -11,7 +12,6 @@ function ListeCycles({ onAjouterCycle }) {
   const [availableShifts, setAvailableShifts] = useState([]); // Liste des shifts disponibles
   const [confirmDelete, setConfirmDelete] = useState(null); // État pour confirmation de suppression
 
-  // Récupérer les cycles et leurs shifts
   useEffect(() => {
     const recupererCycleShifts = async () => {
       try {
@@ -21,6 +21,7 @@ function ListeCycles({ onAjouterCycle }) {
           body: JSON.stringify({
             sql: `
               SELECT
+                c.id AS cycle_id,
                 c.nom_cycle AS cycle_nom,
                 cs.jour,
                 s.nom AS shift_nom
@@ -31,7 +32,7 @@ function ListeCycles({ onAjouterCycle }) {
               JOIN
                 cycles c ON cs.cycle_id = c.id
               ORDER BY
-                c.nom_cycle, cs.jour
+                c.id, cs.jour
             `,
           }),
         });
@@ -42,17 +43,20 @@ function ListeCycles({ onAjouterCycle }) {
 
         const data = await response.json();
 
-        // Regrouper les données par cycle_nom et déterminer le nombre maximal de jours
         let maxDays = 0;
-        const groupedCycles = data.reduce((acc, curr) => {
-          if (!acc[curr.cycle_nom]) acc[curr.cycle_nom] = [];
-          acc[curr.cycle_nom][curr.jour - 1] = curr.shift_nom; // Remplit les jours dans le bon ordre
-          if (curr.jour > maxDays) maxDays = curr.jour; // Met à jour le nombre maximum de jours
-          return acc;
-        }, {});
+        const groupedCycles = {};
+        const namesMapping = {};
+
+        data.forEach((curr) => {
+          if (!groupedCycles[curr.cycle_id]) groupedCycles[curr.cycle_id] = [];
+          groupedCycles[curr.cycle_id][curr.jour - 1] = curr.shift_nom;
+          namesMapping[curr.cycle_id] = curr.cycle_nom;
+          if (curr.jour > maxDays) maxDays = curr.jour;
+        });
 
         setCycleShifts(groupedCycles);
-        setMaxJours(maxDays); // Définit le nombre maximum de jours
+        setCycleNames(namesMapping);
+        setMaxJours(maxDays);
       } catch (err) {
         console.error("Erreur lors de la récupération :", err);
         setError("Impossible de récupérer les données. Veuillez réessayer plus tard.");
@@ -62,15 +66,13 @@ function ListeCycles({ onAjouterCycle }) {
     recupererCycleShifts();
   }, []);
 
-  // Gérer l'ouverture du pop-up de modification
-  const modifierCycle = (cycleNom) => {
-    const cycle = cycleShifts[cycleNom];
-    setCycleActuel(cycleNom);
+  const modifierCycle = (cycleId) => {
+    const cycle = cycleShifts[cycleId];
+    setCycleActuel(cycleId);
     setFormData([...cycle]);
     setPopupVisible(true);
   };
 
-  // Enregistrer les modifications
   const submitModification = async () => {
     try {
       if (formData.some((shift) => !shift)) {
@@ -93,11 +95,7 @@ function ListeCycles({ onAjouterCycle }) {
                 FROM shifts
                 WHERE nom = ?
               )
-              WHERE cycle_id = (
-                SELECT id
-                FROM cycles
-                WHERE nom_cycle = ?
-              ) AND jour = ?;
+              WHERE cycle_id = ? AND jour = ?;
             `,
             params: [shiftNom, cycleActuel, jour],
           }),
@@ -117,33 +115,28 @@ function ListeCycles({ onAjouterCycle }) {
     }
   };
 
-  // Supprimer un cycle
-  const supprimerCycle = async (cycleNom) => {
+  const supprimerCycle = async (cycleId) => {
     try {
-      // Supprimer les shifts associés au cycle
       await fetch("http://localhost:5001/query", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          sql: `DELETE FROM cycle_shifts WHERE cycle_id = (
-            SELECT id FROM cycles WHERE nom_cycle = ?
-          );`,
-          params: [cycleNom],
+          sql: `DELETE FROM cycle_shifts WHERE cycle_id = ?;`,
+          params: [cycleId],
         }),
       });
 
-      // Supprimer le cycle lui-même
       await fetch("http://localhost:5001/query", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          sql: `DELETE FROM cycles WHERE nom_cycle = ?;`,
-          params: [cycleNom],
+          sql: `DELETE FROM cycles WHERE id = ?;`,
+          params: [cycleId],
         }),
       });
 
       const newCycleShifts = { ...cycleShifts };
-      delete newCycleShifts[cycleNom];
+      delete newCycleShifts[cycleId];
       setCycleShifts(newCycleShifts);
       setConfirmDelete(null);
     } catch (err) {
@@ -174,15 +167,15 @@ function ListeCycles({ onAjouterCycle }) {
               <td colSpan={maxJours + 2}>Aucune donnée disponible</td>
             </tr>
           ) : (
-            Object.keys(cycleShifts).map((cycleNom) => (
-              <tr key={cycleNom}>
-                <td>{cycleNom}</td>
+            Object.keys(cycleShifts).map((cycleId) => (
+              <tr key={cycleId}>
+                <td>{cycleNames[cycleId]}</td>
                 {Array.from({ length: maxJours }).map((_, index) => (
-                  <td key={index}>{cycleShifts[cycleNom][index] || "Aucun"}</td>
+                  <td key={index}>{cycleShifts[cycleId][index] || "Aucun"}</td>
                 ))}
                 <td className="actions-cycles">
-                  <button onClick={() => modifierCycle(cycleNom)}>Modifier</button>
-                  <button onClick={() => setConfirmDelete(cycleNom)}>Supprimer</button>
+                  <button onClick={() => modifierCycle(cycleId)}>Modifier</button>
+                  <button onClick={() => setConfirmDelete(cycleId)}>Supprimer</button>
                 </td>
               </tr>
             ))
@@ -194,33 +187,6 @@ function ListeCycles({ onAjouterCycle }) {
         Ajouter Cycle
       </button>
 
-      {/* Pop-up pour modification */}
-      <Popup trigger={popupVisible} setTrigger={setPopupVisible}>
-        <h3>Modifier le cycle {cycleActuel}</h3>
-        {formData.map((shiftNom, index) => (
-          <div key={index}>
-            <label>Jour {index + 1}:</label>
-            <select
-              value={shiftNom || ""}
-              onChange={(e) => setFormData((prev) => {
-                const updated = [...prev];
-                updated[index] = e.target.value;
-                return updated;
-              })}
-            >
-              <option value="">Sélectionnez un shift</option>
-              {availableShifts.map((shift) => (
-                <option key={shift.id} value={shift.nom}>
-                  {shift.nom}
-                </option>
-              ))}
-            </select>
-          </div>
-        ))}
-        <button onClick={submitModification}>Enregistrer</button>
-      </Popup>
-
-      {/* Pop-up pour confirmation de suppression */}
       {confirmDelete && (
         <Popup trigger={true} setTrigger={() => setConfirmDelete(null)}>
           <h3>Confirmer la suppression</h3>

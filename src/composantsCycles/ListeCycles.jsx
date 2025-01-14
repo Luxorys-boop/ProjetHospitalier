@@ -68,7 +68,7 @@ function ListeCycles({ onAjouterCycle }) {
 
   const modifierCycle = (cycleId) => {
     const cycle = cycleShifts[cycleId];
-    setCycleActuel(cycleId);
+    setCycleActuel(cycleId); // Utiliser l'ID du cycle
     setFormData([...cycle]);
     setPopupVisible(true);
   };
@@ -187,10 +187,37 @@ function ListeCycles({ onAjouterCycle }) {
         Ajouter Cycle
       </button>
 
+      {popupVisible && (
+        <Popup trigger={popupVisible} setTrigger={setPopupVisible}>
+          <h3>Modifier le cycle {cycleNames[cycleActuel]}</h3>
+          {formData.map((shiftNom, index) => (
+            <div key={index}>
+              <label>Jour {index + 1}:</label>
+              <select
+                value={shiftNom || ""}
+                onChange={(e) => setFormData((prev) => {
+                  const updated = [...prev];
+                  updated[index] = e.target.value;
+                  return updated;
+                })}
+              >
+                <option value="">Sélectionnez un shift</option>
+                {availableShifts.map((shift) => (
+                  <option key={shift.id} value={shift.nom}>
+                    {shift.nom}
+                  </option>
+                ))}
+              </select>
+            </div>
+          ))}
+          <button onClick={submitModification}>Enregistrer</button>
+        </Popup>
+      )}
+
       {confirmDelete && (
         <Popup trigger={true} setTrigger={() => setConfirmDelete(null)}>
           <h3>Confirmer la suppression</h3>
-          <p>Êtes-vous sûr de vouloir supprimer ce cycle ?</p>
+          <p>Êtes-vous sûr de vouloir supprimer le cycle {cycleNames[confirmDelete]} ?</p>
           <button onClick={() => supprimerCycle(confirmDelete)}>Oui</button>
           <button onClick={() => setConfirmDelete(null)}>Non</button>
         </Popup>

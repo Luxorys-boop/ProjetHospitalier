@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Filler from './Filler';
-const TableUser = ({ daysInMonth, startDay }) => {
+
+const TableUser = ({ daysInMonth }) => {
     const [users, setUsers] = useState([]);
     const [error, setError] = useState(null);
 
@@ -36,12 +37,12 @@ const TableUser = ({ daysInMonth, startDay }) => {
                     {Array.from({ length: 0 }).map((_, i) => (
                         <td key={`empty-${i}`}></td>
                     ))}
-                    {Array.from({ length: 31 }).map((_, i) => (
+                    {Array.from({ length: daysInMonth }).map((_, i) => (
                         <td key={i + 1}></td>
                     ))}
                 </tr>
             ))}
-            <Filler/>
+            <Filler />
         </>
     );
 };

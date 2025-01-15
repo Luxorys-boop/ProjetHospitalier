@@ -136,6 +136,21 @@
     max-height: 664px;
     overflow-y: auto;
   }
+
+  .container {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .left-button, .right-button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+  }  
   
   .tablemaker {
     width: 100%;

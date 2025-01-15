@@ -5,7 +5,7 @@ import Navbar from './components/Navbar';
 import UtilisateursPage from './components/Utilisateurs';
 import RemoveSelected from './components/RemoveSelected'
 import Layout from "./Layout"; 
-import Filler from './components/Filler';
+import BesoinInfirmier from "./components/BesoinInfirmier"
 
 function App() {
   const [buttonPopup, setButtonPopup] = useState(false);
@@ -31,6 +31,7 @@ function App() {
       <h2>Ajout Utilisateur</h2>
       <UtilisateursPage/>
     </Popup>
+    <BesoinInfirmier/>
     </Layout>
   );
 }

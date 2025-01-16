@@ -1,0 +1,82 @@
+.indicateurs-container {
+  max-height: 400px;
+  overflow-y: auto;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  margin: 20px auto;
+  width: 90%; /* Étendre le tableau pour le centrer */
+}
+
+.indicateurs-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: center;
+}
+
+/* Styles pour les cellules */
+.indicateurs-table th,
+.indicateurs-table td {
+  padding: 15px; /* Espace entre le contenu et les bordures */
+  border: 1px solid #ccc; /* Bordure pour chaque cellule */
+  text-align: center;
+}
+
+/* En-têtes du tableau */
+.indicateurs-table thead th {
+  position: sticky; /* Fixe les en-têtes en haut lors du défilement */
+  top: 0; /* Position en haut */
+  background-color: #cce7ff; /* Couleur bleu principal */
+  color: black; /* Texte blanc */
+  text-align: center;
+  text-transform: uppercase; /* Texte en majuscules */
+  z-index: 2; /* Priorité pour rester au-dessus */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Ombre subtile pour séparation */
+}
+
+/* Ligne de totaux */
+.indicateurs-table tfoot td {
+  position: sticky; /* Fixe la ligne de totaux en bas lors du défilement */
+  bottom: 0; /* Position en bas */
+  background-color: #f0f0f0; /* Fond gris clair */
+  color: black;
+  font-weight: bold; /* Texte en gras */
+  text-align: center; /* Centrer le contenu */
+  z-index: 2; /* Priorité pour rester au-dessus */
+  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1); /* Ombre subtile pour séparation */
+}
+
+
+/* Texte dans le conteneur */
+.appindicateurs {
+  padding: 20px; /* Espacement autour du contenu */
+}
+
+.appindicateurs h1 {
+  font-size: 24px; /* Taille du titre */
+  margin-bottom: 20px; /* Espacement sous le titre */
+  color: #007bff; /* Couleur bleu principal */
+  text-align: center; /* Centrer le titre */
+}
+
+/* Responsive : ajustement pour écrans plus petits */
+@media (max-width: 768px) {
+  .indicateurs-container {
+    width: 95%; /* Réduit la largeur du tableau */
+    padding: 5px; /* Moins d'espace intérieur */
+  }
+
+  .indicateurs-table th, .indicateurs-table td {
+    padding: 10px;
+    border: 1px solid #ccc;
+  }
+}
+
+.indicateurs-header {
+  position: relative; /* Position relative pour contrôle précis */
+  text-align: center;
+  font-size: 32px; /* Plus grand pour un titre visible */
+  margin: 0; /* Supprime les marges par défaut */
+  padding-top: 0px; /* Laisse un petit espace par rapport au bord supérieur */
+  color: #333333; /* Couleur bleu principal */
+  font-weight: bold;
+}

@@ -5,15 +5,17 @@ import './index.css';
 import App from './App';
 import AppCycles from './composantsCycles/AppCycles';
 import AppShifts from './composantsShifts/AppShifts';
+import AppIndicateurs from './composantsIndicateurs/AppIndicateurs';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <Router>
-      <Routes>
-        <Route path="/" element={<App />} />
-        <Route path="/cycles" element={<AppCycles />} />
-        <Route path="/shifts" element={<AppShifts />} />
-      </Routes>
+    <Routes>
+      <Route path="/" element={<App />} />
+      <Route path="/cycles" element={<AppCycles />} />
+      <Route path="/shifts" element={<AppShifts />} />
+      <Route path="/indicateurs" element={<AppIndicateurs />} />
+    </Routes>
     </Router>
   </StrictMode>
 );

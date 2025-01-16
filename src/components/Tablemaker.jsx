@@ -7,8 +7,9 @@ function TableMaker() {
 
   const changeMonth = (delta) => {
     setCurrentDate((prevDate) => {
-      const newDate = new Date(prevDate.setMonth(prevDate.getMonth() + delta));
-      return new Date(newDate);
+      const newDate = new Date(prevDate);
+      newDate.setMonth(newDate.getMonth() + delta);
+      return newDate;
     });
   };
 

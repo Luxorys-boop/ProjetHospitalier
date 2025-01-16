@@ -84,7 +84,7 @@ const Filler = () => {
           for (let i = 1; i < tbody[x].childNodes.length; i++) {
             let p = document.createElement("p");
             if (typeof tbody[x].childNodes[i].childNodes[0] === 'undefined') {
-              p.textContent = usersCycle[x][i];
+              p.textContent = usersCycle[x][i-1];
               if (p.textContent === "") {
                 p.textContent = "RH";
               }

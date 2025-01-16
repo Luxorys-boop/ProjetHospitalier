@@ -2,6 +2,10 @@ import React, { useEffect, useState } from 'react';
 import Filler from './Filler';
 
 const TableUser = ({ daysInMonth, refresh, onUserSelectionChange }) => {
+    /**
+     * Gestion d'état de Users pour contenir la liste des Users et l'afficher en bas de page si aucune erreur n'est détectée.
+     * Gestion d'état d'Erreurs pour définir l'erreur si présente et l'afficher en bas de page.
+     */
     const [users, setUsers] = useState([]);
     const [error, setError] = useState(null);
 
@@ -28,6 +32,10 @@ const TableUser = ({ daysInMonth, refresh, onUserSelectionChange }) => {
         fetchUsers();
     }, []);
 
+    /**
+     * Fonction permettant de passer à onUserSelectionChange un userid.
+     * @param {*} id 
+     */
     const handleCheckboxChange = (id) => {
         onUserSelectionChange(id);
     };

@@ -3,9 +3,19 @@ import TableUser from './TableUser';
 import "./Tablemaker.css";
 
 function TableMaker({ onUserSelectionChange }) {
+  
+  /**
+   * Gestion d'état contenant des datas sur la date actuelle qui se met à jour continuellement.
+   * Gestion d'état du refresh contenant un boleén, si on le turn ON il refresh le Filler.
+   */
   const [currentDate, setCurrentDate] = useState(new Date());
   const [refresh, setRefresh] = useState(false);
 
+  /**
+   * Fonction utilisant un paramètre (1 ou -1) -> Selon le bouton. Permettant d'effectuer des changements sur le tableau actuel
+   * Tout en mettant à jour le composant Filler ce qui permet d'adapter le tableau en toutes circonstances.
+   * @param {*} delta 
+   */
   const changeMonth = (delta) => {
     setCurrentDate((prevDate) => {
       const newDate = new Date(prevDate);
@@ -15,11 +25,17 @@ function TableMaker({ onUserSelectionChange }) {
     setRefresh(prev => !prev);
   };
 
+  /*Constantes permettant de stocker les datas retournées par les fonctions définies ci dessous */
+
   const year = currentDate.getFullYear();
   const month = getMonth(currentDate.getMonth());
   const startDay = new Date(year, currentDate.getMonth(), 1).getDay(); // Jour de la semaine du 1er du mois
   const daysInMonth = getDaysInMonth(year, currentDate.getMonth());
 
+  /**
+   * Fonction permettant de créer le début du tableau et son nombre de jours.
+   * @returns Retoune chaque jour de la semaine précédé de son initial : L1 M2 Me3 ect...
+   */
   const TableRow = () => {
     const days = Array.from({ length: daysInMonth }, (_, index) => {
       const dayOfWeek = (startDay + index) % 7; // Calculer le jour de la semaine
@@ -35,7 +51,10 @@ function TableMaker({ onUserSelectionChange }) {
       </tr>
     );
   };
-
+  /**
+   * Retourne chaque semaine précédé de l'inital S : e.g : S1, S2, S3. En fonction du mois dans l'année.
+   * @returns Les semaines dans le mois
+   */
   const WeekRow = () => {
     const weeks = Array.from({ length: Math.ceil(daysInMonth / 7) }, (_, index) => {
       return `S${getWeekOfYear(year, currentDate.getMonth(), index * 7 + 1)}`;

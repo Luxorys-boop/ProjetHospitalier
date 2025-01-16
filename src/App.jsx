@@ -1,16 +1,25 @@
 import React, { useState } from 'react';
 import TableMaker from './components/Tablemaker';
 import Popup from './components/Popup';
-import Navbar from './components/Navbar';
 import UtilisateursPage from './components/Utilisateurs';
 import RemoveButton from './components/RemoveSelected';
 import Layout from "./Layout"; 
 import BesoinInfirmier from "./components/BesoinInfirmier";
 
 function App() {
+
+  /**
+   * Etats contenants des données :
+   * Gestion de l'affichage de la PopUp par un booleén
+   * Gestion des checkedboxes utilisateurs, si l'utilisateur clique sur une box
+   * Cela ajoute le user ID dans cette liste d'état.
+   */
   const [buttonPopup, setButtonPopup] = useState(false);
   const [selectedUsers, setSelectedUsers] = useState([]);
 
+  /**
+   * Fonction permettant d'ajouter les users sans doublons dans la liste.
+   */
   const handleUserSelectionChange = (userId) => {
     setSelectedUsers((prevSelectedUsers) =>
       prevSelectedUsers.includes(userId)
@@ -19,13 +28,18 @@ function App() {
     );
   };
 
+  /**
+   * Fonction notifiant de la suppression complète des userID étant présents auparavant dans la liste
+   */
   const handleRemoveComplete = () => {
     setSelectedUsers([]);
   };
 
+  /**
+   * Return du composant en balises html 
+   */
   return (
     <Layout>
-      <Navbar />
       <div className="tableContainer">
         <TableMaker onUserSelectionChange={handleUserSelectionChange} />
       </div>
@@ -35,6 +49,8 @@ function App() {
             setButtonPopup(true);
             let title = document.getElementsByClassName("theadmaker")[0];
             title.style.position = "inherit";
+            let title2 = document.getElementsByClassName("theadmaker")[1];
+            title2.style.display = "none";
           }}
           className="addButton"
         >

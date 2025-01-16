@@ -67,11 +67,6 @@ const Filler = ({ refresh }) => {
       const userCycles = cycleShifts[userId];
       Object.keys(userCycles).forEach(cycleId => {
         const shifts = userCycles[cycleId];
-        for(let y = 0 ; y < shifts.length ; y++) {
-          if(typeof shifts[y] == "undefined") {
-            shifts[y] = "RH"
-          }
-        }
         cycleUserExtended.push(extendCycleToNDays(shifts, n));
       });
     });

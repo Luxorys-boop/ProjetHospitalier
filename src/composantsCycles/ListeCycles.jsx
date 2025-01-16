@@ -1,19 +1,18 @@
 import React, { useState, useEffect } from "react";
-import Popup from "../components/Popup.jsx";
 
 function ListeCycles({ onAjouterCycle }) {
   const [cycleShifts, setCycleShifts] = useState({});
   const [cycleNames, setCycleNames] = useState({}); // Associe cycle_id à cycle_nom
-  const [error, setError] = useState(null);
-  const [maxJours, setMaxJours] = useState(0); // Stocke le nombre maximum de jours
+  const [maxJours, setMaxJours] = useState(0); // Nombre maximum de jours
   const [cycleActuel, setCycleActuel] = useState(null); // Pour modification
-  const [popupVisible, setPopupVisible] = useState(false); // Pop-up de modification
   const [formData, setFormData] = useState([]); // État pour stocker les modifications
   const [availableShifts, setAvailableShifts] = useState([]); // Liste des shifts disponibles
-  const [confirmDelete, setConfirmDelete] = useState(null); // État pour confirmation de suppression
+  const [popupModifierVisible, setPopupModifierVisible] = useState(false);
+  const [popupSupprimerVisible, setPopupSupprimerVisible] = useState(false);
+  const [cycleASupprimer, setCycleASupprimer] = useState(null);
 
   useEffect(() => {
-    const recupererCycleShifts = async () => {
+    const recupererCycles = async () => {
       try {
         const response = await fetch("http://localhost:5001/query", {
           method: "POST",
@@ -37,12 +36,7 @@ function ListeCycles({ onAjouterCycle }) {
           }),
         });
 
-        if (!response.ok) {
-          throw new Error("Erreur lors de la récupération des cycles shifts");
-        }
-
         const data = await response.json();
-
         let maxDays = 0;
         const groupedCycles = {};
         const namesMapping = {};
@@ -58,32 +52,97 @@ function ListeCycles({ onAjouterCycle }) {
         setCycleNames(namesMapping);
         setMaxJours(maxDays);
       } catch (err) {
-        console.error("Erreur lors de la récupération :", err);
-        setError("Impossible de récupérer les données. Veuillez réessayer plus tard.");
+        console.error("Erreur lors de la récupération des cycles :", err);
       }
     };
 
-    recupererCycleShifts();
+    const recupererShiftsDisponibles = async () => {
+      try {
+        const response = await fetch("http://localhost:5001/query", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            sql: "SELECT * FROM shifts",
+          }),
+        });
+
+        const data = await response.json();
+        setAvailableShifts(data);
+      } catch (err) {
+        console.error("Erreur lors de la récupération des shifts :", err);
+      }
+    };
+
+    recupererCycles();
+    recupererShiftsDisponibles();
   }, []);
 
-  const modifierCycle = (cycleId) => {
-    const cycle = cycleShifts[cycleId];
-    setCycleActuel(cycleId); // Utiliser l'ID du cycle
-    setFormData([...cycle]);
-    setPopupVisible(true);
+  const ouvrirPopupModifier = (cycleId) => {
+    setCycleActuel(cycleId);
+    setFormData([...cycleShifts[cycleId]]);
+    setPopupModifierVisible(true);
   };
 
-  const submitModification = async () => {
-    try {
-      if (formData.some((shift) => !shift)) {
-        alert("Veuillez sélectionner un shift pour chaque jour.");
-        return;
-      }
+  const fermerPopupModifier = () => {
+    setPopupModifierVisible(false);
+    setCycleActuel(null);
+    setFormData([]);
+  };
 
+  const verifierContraintes = async (cycle) => {
+    try {
+      const response = await fetch("http://localhost:5001/verify-constraints", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ cycle }),
+      });
+  
+      const { violations } = await response.json();
+      return violations;
+    } catch (error) {
+      console.error("Erreur lors de la vérification des contraintes :", error);
+      return [];
+    }
+  };
+  
+  const enregistrerModification = async () => {
+    // Construire le cycle à partir des modifications
+    const cycle = formData.map((shiftNom, index) => {
+      const shift = availableShifts.find((s) => s.nom === shiftNom);
+      const heureDebut = shift ? shift.heure_debut % 24 : 0;
+      const duree = shift ? shift.duree : 0;
+      const heureFin = (heureDebut + duree) % 24;
+  
+      return {
+        jour: index + 1,
+        shiftId: shift ? shift.id : null,
+        heureDebut,
+        duree,
+        heureFin,
+        typeRepos: shift ? shift.nom === "RH" : false,
+      };
+    });
+  
+    // Vérifier les contraintes
+    const violations = await verifierContraintes(cycle);
+  
+    if (violations.length > 0) {
+      const confirmer = window.confirm(
+        `Des violations de contraintes ont été détectées :\n\n${violations.join(
+          "\n"
+        )}\n\nVoulez-vous continuer et enregistrer les modifications malgré ces violations ?`
+      );
+      if (!confirmer) {
+        return; // Ne pas enregistrer les modifications si l'utilisateur annule
+      }
+    }
+  
+    // Si l'utilisateur accepte, sauvegarder les modifications
+    try {
       for (let i = 0; i < formData.length; i++) {
         const shiftNom = formData[i];
         const jour = i + 1;
-
+  
         await fetch("http://localhost:5001/query", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -101,28 +160,27 @@ function ListeCycles({ onAjouterCycle }) {
           }),
         });
       }
-
+  
       setCycleShifts((prev) => ({
         ...prev,
         [cycleActuel]: formData,
       }));
-
-      setPopupVisible(false);
-      setCycleActuel(null);
+  
+      fermerPopupModifier();
     } catch (err) {
       console.error("Erreur lors de la modification :", err);
-      setError("Impossible de modifier le cycle. Veuillez réessayer.");
     }
   };
+  
 
-  const supprimerCycle = async (cycleId) => {
+  const supprimerCycle = async () => {
     try {
       await fetch("http://localhost:5001/query", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           sql: `DELETE FROM cycle_shifts WHERE cycle_id = ?;`,
-          params: [cycleId],
+          params: [cycleASupprimer],
         }),
       });
 
@@ -131,25 +189,26 @@ function ListeCycles({ onAjouterCycle }) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           sql: `DELETE FROM cycles WHERE id = ?;`,
-          params: [cycleId],
+          params: [cycleASupprimer],
         }),
       });
 
-      const newCycleShifts = { ...cycleShifts };
-      delete newCycleShifts[cycleId];
-      setCycleShifts(newCycleShifts);
-      setConfirmDelete(null);
+      setCycleShifts((prev) => {
+        const newShifts = { ...prev };
+        delete newShifts[cycleASupprimer];
+        return newShifts;
+      });
+
+      annulerSuppression();
     } catch (err) {
       console.error("Erreur lors de la suppression :", err);
-      setError("Impossible de supprimer le cycle. Veuillez réessayer.");
     }
   };
 
+  
   return (
     <div className="liste-cycles">
       <h2>Gestion des cycles de travail</h2>
-
-      {error && <p className="error-message">{error}</p>}
 
       <table>
         <thead>
@@ -162,24 +221,18 @@ function ListeCycles({ onAjouterCycle }) {
           </tr>
         </thead>
         <tbody>
-          {Object.keys(cycleShifts).length === 0 ? (
-            <tr>
-              <td colSpan={maxJours + 2}>Aucune donnée disponible</td>
+          {Object.keys(cycleShifts).map((cycleId) => (
+            <tr key={cycleId}>
+              <td>{cycleNames[cycleId]}</td>
+              {Array.from({ length: maxJours }).map((_, index) => (
+                <td key={index}>{cycleShifts[cycleId][index] || "Aucun"}</td>
+              ))}
+              <td className="actions-cycles">
+                <button onClick={() => ouvrirPopupModifier(cycleId)}>Modifier</button>
+                <button onClick={() => confirmerSuppression(cycleId)}>Supprimer</button>
+              </td>
             </tr>
-          ) : (
-            Object.keys(cycleShifts).map((cycleId) => (
-              <tr key={cycleId}>
-                <td>{cycleNames[cycleId]}</td>
-                {Array.from({ length: maxJours }).map((_, index) => (
-                  <td key={index}>{cycleShifts[cycleId][index] || "Aucun"}</td>
-                ))}
-                <td className="actions-cycles">
-                  <button onClick={() => modifierCycle(cycleId)}>Modifier</button>
-                  <button onClick={() => setConfirmDelete(cycleId)}>Supprimer</button>
-                </td>
-              </tr>
-            ))
-          )}
+          ))}
         </tbody>
       </table>
 
@@ -187,40 +240,54 @@ function ListeCycles({ onAjouterCycle }) {
         Ajouter Cycle
       </button>
 
-      {popupVisible && (
-        <Popup trigger={popupVisible} setTrigger={setPopupVisible}>
-          <h3>Modifier le cycle {cycleNames[cycleActuel]}</h3>
-          {formData.map((shiftNom, index) => (
-            <div key={index}>
-              <label>Jour {index + 1}:</label>
-              <select
-                value={shiftNom || ""}
-                onChange={(e) => setFormData((prev) => {
-                  const updated = [...prev];
-                  updated[index] = e.target.value;
-                  return updated;
-                })}
-              >
-                <option value="">Sélectionnez un shift</option>
-                {availableShifts.map((shift) => (
-                  <option key={shift.id} value={shift.nom}>
-                    {shift.nom}
-                  </option>
-                ))}
-              </select>
+      {popupModifierVisible && (
+        <>
+          <div className="backdrop" onClick={fermerPopupModifier}></div>
+          <div className="formulaire-ajout-cycle">
+            <h2>Modifier le cycle {cycleNames[cycleActuel]}</h2>
+            {formData.map((shiftNom, index) => (
+              <div key={index} className="jour">
+                <label>Jour {index + 1} :</label>
+                <select
+                  value={shiftNom || ""}
+                  onChange={(e) =>
+                    setFormData((prev) => {
+                      const updated = [...prev];
+                      updated[index] = e.target.value;
+                      return updated;
+                    })
+                  }
+                >
+                  <option value="">Sélectionnez un shift</option>
+                  {availableShifts.map((shift) => (
+                    <option key={shift.id} value={shift.nom}>
+                      {shift.nom}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            ))}
+            <div className="actions-cycles">
+              <button onClick={enregistrerModification}>Enregistrer</button>
+              <button onClick={fermerPopupModifier}>Annuler</button>
             </div>
-          ))}
-          <button onClick={submitModification}>Enregistrer</button>
-        </Popup>
+
+          </div>
+        </>
       )}
 
-      {confirmDelete && (
-        <Popup trigger={true} setTrigger={() => setConfirmDelete(null)}>
-          <h3>Confirmer la suppression</h3>
-          <p>Êtes-vous sûr de vouloir supprimer le cycle {cycleNames[confirmDelete]} ?</p>
-          <button onClick={() => supprimerCycle(confirmDelete)}>Oui</button>
-          <button onClick={() => setConfirmDelete(null)}>Non</button>
-        </Popup>
+      {popupSupprimerVisible && (
+        <>
+          <div className="backdrop" onClick={annulerSuppression}></div>
+          <div className="formulaire-ajout-cycle">
+            <p>
+              Êtes-vous sûr de vouloir supprimer le cycle{" "}
+              <strong>{cycleNames[cycleASupprimer]}</strong> ?
+            </p>
+            <button onClick={supprimerCycle}>Oui</button>
+            <button onClick={annulerSuppression}>Non</button>
+          </div>
+        </>
       )}
     </div>
   );

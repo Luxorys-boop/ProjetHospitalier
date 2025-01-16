@@ -67,12 +67,12 @@ function FormulaireAjoutCycle({ onFermer }) {
     const cycle = jours.map((shiftId, index) => {
       const shiftIdInt = parseInt(shiftId, 10); // Convertir shiftId en entier
       const shift = shifts.find((s) => s.id === shiftIdInt); // Trouver le shift correspondant
-    
+
       // Ajuster les heures de début et de fin pour rester dans une plage valide
       const heureDebut = shift ? shift.heure_debut % 24 : 0;
       const duree = shift ? shift.duree : 0;
       const heureFin = (heureDebut + duree) % 24;
-    
+
       // Retourner l'objet cycle
       return {
         jour: index % 7 + 1, // Calcul du jour (1 à 7)
@@ -83,23 +83,20 @@ function FormulaireAjoutCycle({ onFermer }) {
         typeRepos: shift ? shift.nom === "RH" : false, // Type de repos
       };
     });
-    
-    // Afficher les propriétés du cycle
-    cycle.forEach((entry) => {
-      console.log("Jour :", entry.jour);
-      console.log("Shift ID :", entry.shiftId);
-      console.log("Heure début :", entry.heureDebut);
-      console.log("Durée :", entry.duree);
-      console.log("Type repos :", entry.typeRepos);
-    });
-
 
     // Vérifier les contraintes
     const violations = await verifierContraintes(cycle);
 
     if (violations.length > 0) {
-      alert("Des violations de contraintes ont été détectées :\n\n" + violations.join("\n"));
-      return;
+      // Afficher une popup listant les violations et demander confirmation
+      const confirmer = window.confirm(
+        `Des violations de contraintes ont été détectées :\n\n${violations.join(
+          "\n"
+        )}\n\nVoulez-vous continuer et créer le cycle malgré ces violations ?`
+      );
+      if (!confirmer) {
+        return; // Ne pas créer le cycle si l'utilisateur annule
+      }
     }
 
     try {
@@ -137,6 +134,7 @@ function FormulaireAjoutCycle({ onFermer }) {
       console.error("Erreur lors de l'ajout du cycle :", err);
     }
   };
+
 
   return (
     <>

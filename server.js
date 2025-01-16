@@ -192,6 +192,160 @@ app.post('/verify-constraints', async (req, res) => {
     res.json({ violations });
 });
 
+// Endpoint : add besoins 
+app.post("/add-besoin", async (req, res) => {
+    const { semaineBesoins, annee } = req.body;
+  
+    console.log("Données reçues :", { semaineBesoins, annee });
+  
+    if (!semaineBesoins || !annee) {
+      console.error("Données manquantes : semaineBesoins ou annee");
+      return res.status(400).json({ error: "Données manquantes pour l'ajout des besoins." });
+    }
+  
+    try {
+      const connection = await pool.getConnection();
+  
+      for (let mois = 0; mois < 12; mois++) {
+        const premierJourMois = new Date(Date.UTC(annee, mois, 1));
+  
+        for (let jour = 0; jour < 31; jour++) {
+          const dateJour = new Date(premierJourMois);
+          dateJour.setUTCDate(jour + 1);
+  
+          if (dateJour.getUTCMonth() !== mois) break; // on arrete  si on dépasse le mois actuel
+  
+          const jourIndex = (jour % 7); 
+          const besoinsJour = semaineBesoins[jourIndex];
+          if (!besoinsJour) continue;
+  
+          for (const [shiftId, nombrePersonnel] of Object.entries(besoinsJour)) {
+            if (!shiftId || typeof nombrePersonnel === "undefined") {
+              console.error(`Paramètre manquant pour le shiftId ${shiftId} ou nombrePersonnel ${nombrePersonnel}`);
+              continue;
+            }
+  
+            const sql = `
+              INSERT INTO besoin_personnel (jour, shift_id, nombre_personnel)
+              VALUES (?, ?, ?)
+              ON DUPLICATE KEY UPDATE nombre_personnel = ?;
+            `;
+            const params = [
+              dateJour.toISOString().split("T")[0],
+              shiftId,
+              nombrePersonnel,
+              nombrePersonnel,
+            ];
+            console.log("Exécution de la requête SQL avec :", params);
+            await connection.execute(sql, params);
+          }
+        }
+      }
+  
+      connection.release();
+      res.json({ success: true });
+    } catch (err) {
+      console.error("Erreur lors de l'ajout des besoins :", err);
+      res.status(500).json({ error: "Erreur lors de l'ajout des besoins." });
+    }
+  });
+  
+  /// Endpoint : Récupérer la liste des shifts (sauf RH et CA)
+  app.get("/get-shifts", async (req, res) => {
+    try {
+      const sql = "SELECT id, nom FROM shifts WHERE nom NOT IN ('RH', 'CA');";
+      const [rows] = await pool.execute(sql); 
+      res.json(rows);
+    } catch (err) {
+      console.error("Erreur lors de la récupération des shifts :", err);
+      res.status(500).json({ error: "Erreur lors de la récupération des shifts." });
+    }
+  });
+  
+  // Endpoint pour récupérer les besoins
+  app.post("/get-besoins", async (req, res) => {
+    const { mois, annee } = req.body;
+  
+    console.log("Récupération des besoins pour :", { mois, annee });
+  
+    if (!mois || !annee) {
+      return res.status(400).json({ error: "Mois ou année manquants." });
+    }
+  
+    try {
+      const sql = `
+        SELECT jour, shift_id, nombre_personnel 
+        FROM besoin_personnel 
+        WHERE MONTH(jour) = ? AND YEAR(jour) = ?;
+      `;
+      const [rows] = await pool.execute(sql, [mois, annee]);
+  
+      const normalizedRows = rows.map((row) => ({
+        ...row,
+        jour: new Date(row.jour).toISOString().split("T")[0], // Conversion de la date
+      }));
+  
+      console.log("Données récupérées (normalisées) :", normalizedRows);
+      res.json(normalizedRows);
+    } catch (error) {
+      console.error("Erreur lors de la récupération des besoins :", error);
+      res.status(500).json({ error: "Erreur lors de la récupération des besoins." });
+    }
+  });
+  
+  // Endpoint : Supprimer tous les besoins personnels
+  app.delete("/delete-all-besoins", async (req, res) => {
+    try {
+      const sql = "DELETE FROM besoin_personnel;";
+      const connection = await pool.getConnection();
+      await connection.execute(sql);
+      connection.release();
+      console.log("Tous les besoins personnels ont été supprimés.");
+      res.status(200).json({ success: true, message: "Tous les besoins personnels ont été supprimés." });
+    } catch (error) {
+      console.error("Erreur lors de la suppression des besoins personnels :", error);
+      res.status(500).json({ error: "Erreur lors de la suppression des besoins personnels." });
+    }
+  });
+  
+  // Endpoint pour mettre à jour un besoin spécifique
+  app.post("/update-besoin", async (req, res) => {
+    const { jour, shift_id, nombre_personnel } = req.body;
+  
+    console.log("Modification demandée :", { jour, shift_id, nombre_personnel });
+  
+    if (!jour || !shift_id || typeof nombre_personnel === "undefined") {
+      return res.status(400).json({ error: "Paramètres manquants ou invalides." });
+    }
+  
+    try {
+      const sql = `
+        UPDATE besoin_personnel 
+        SET nombre_personnel = ? 
+        WHERE jour = ? AND shift_id = ?;
+      `;
+      const params = [nombre_personnel, jour, shift_id];
+  
+      const connection = await pool.getConnection();
+      const [result] = await connection.execute(sql, params);
+      connection.release();
+  
+      console.log("Résultat de la mise à jour :", result);
+      if (result.affectedRows > 0) {
+        res.status(200).json({ success: true, message: "Besoin modifié avec succès." });
+      } else {
+        res.status(404).json({
+          success: false,
+          message: "Aucun besoin correspondant trouvé pour la modification.",
+        });
+      }
+    } catch (error) {
+      console.error("Erreur lors de la modification du besoin :", error);
+      res.status(500).json({ error: "Erreur lors de la modification du besoin." });
+    }
+  });
+  
+
 // Route pour vérifier la connexion à la base de données
 app.get('/connect', async (res) => {
     try {

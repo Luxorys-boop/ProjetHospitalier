@@ -3,9 +3,10 @@ import TableMaker from './components/Tablemaker';
 import Popup from './components/Popup';
 import UtilisateursPage from './components/Utilisateurs';
 import RemoveButton from './components/RemoveSelected';
-import Layout from "./Layout"; 
+import Layout from "./Layout";
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
+import BesoinsPersonnel from './composantsBesoinsPersonnel/BesoinsPersonnel';
 
 function App() {
 
@@ -27,26 +28,26 @@ function App() {
   const downloadPDF = () => {
     // Initialiser jsPDF en mode paysage
     const doc = new jsPDF('landscape', 'mm', 'a4');
-  
+
     // Ajouter un titre centré
     doc.setFontSize(22);
     doc.setTextColor(40);
     const title = 'Rapport - Page Principale';
     const titleWidth = doc.getTextWidth(title);
     doc.text(title, (doc.internal.pageSize.getWidth() - titleWidth) / 2, 20);
-  
+
     // Ajouter une ligne sous le titre
     doc.setLineWidth(0.5);
     doc.setDrawColor(0, 0, 0);
     doc.line(10, 25, doc.internal.pageSize.getWidth() - 10, 25);
-  
+
     // Ajouter un espacement avant le tableau
     doc.setFontSize(12);
     doc.text(' ', 10, 30);
-  
+
     // Sélection du tableau dans le DOM
     const tableElement = document.querySelector('.tableContainer table');
-  
+
     if (tableElement) {
       // Utilisation de autoTable pour structurer correctement le contenu avec des styles personnalisés
       doc.autoTable({
@@ -83,7 +84,7 @@ function App() {
           2: { cellWidth: 'wrap' }, // Ajuste la troisième colonne si nécessaire
         },
       });
-  
+
       // Ajouter un pied de page
       const pageCount = doc.internal.getNumberOfPages();
       for (let i = 1; i <= pageCount; i++) {
@@ -91,7 +92,7 @@ function App() {
         doc.setFontSize(10);
         doc.text(`Page ${i} of ${pageCount}`, doc.internal.pageSize.getWidth() - 20, doc.internal.pageSize.getHeight() - 10, { align: 'right' });
       }
-  
+
       // Sauvegarder le PDF
       doc.save('rapport-page-principale.pdf');
     } else {
@@ -101,7 +102,7 @@ function App() {
 
   const downloadCSV = () => {
     const tableElement = document.querySelector('.tableContainer table');
-    
+
     if (tableElement) {
       let csv = [];
       for (let row of tableElement.rows) {
@@ -152,11 +153,12 @@ function App() {
         </button>
         <RemoveButton selectedItems={selectedUsers} onRemoveComplete={handleRemoveComplete} />
       </div>
-      
+
       <Popup trigger={buttonPopup} setTrigger={setButtonPopup}>
         <h2>Ajout Utilisateur</h2>
         <UtilisateursPage />
       </Popup>
+      <BesoinsPersonnel />
     </Layout>
   );
 }

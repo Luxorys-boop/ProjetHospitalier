@@ -1,62 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import './Indicateurs.css';
 
-function IndicateursTable() {
-  const [indicateurs, setIndicateurs] = useState([]);
-  const [totaux, setTotaux] = useState([]);
-
-  useEffect(() => {
-    const fetchIndicateurs = async () => {
-      try {
-        const response = await fetch('http://localhost:5001/query', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            sql: `
-              SELECT 
-                u.id AS utilisateur_id,
-                u.nom AS utilisateur_nom,
-                COUNT(DISTINCT CASE WHEN s.besoin_infirmiers > 0 THEN cs.id END) AS besoins_non_couverts,
-                COUNT(DISTINCT CASE WHEN s.besoin_infirmiers < 0 THEN cs.id END) AS surplus,
-                COUNT(CASE WHEN s.nom = 'Matin' THEN 1 END) AS shifts_matin,
-                COUNT(CASE WHEN s.nom = 'Soir' THEN 1 END) AS shifts_soir,
-                COUNT(CASE WHEN ((DAYOFWEEK(cs.jour) + 4) % 7) = 4 THEN 1 END) AS samedis_travailles,
-                COUNT(CASE WHEN ((DAYOFWEEK(cs.jour) + 4) % 7) = 5 THEN 1 END) AS dimanches_travailles,
-                COUNT(CASE WHEN s.nom = 'CA' THEN 1 END) AS total_ca,
-                COUNT(CASE WHEN s.nom = 'RH' THEN 1 END) AS total_rh
-              FROM utilisateurs u
-              LEFT JOIN cycle_shifts cs ON u.cycle_id = cs.cycle_id
-              LEFT JOIN shifts s ON cs.shift_id = s.id
-              GROUP BY u.id;
-            `,
-          }),
-        });
-
-        const data = await response.json();
-        console.log('Données récupérées :', data); // Vérification en console
-        setIndicateurs(data);
-
-        // Calcul des totaux
-        const totauxColonnes = Array(9).fill(0); // 9 colonnes à calculer
-        data.forEach((row) => {
-          totauxColonnes[0] += row.besoins_non_couverts || 0;
-          totauxColonnes[1] += row.surplus || 0;
-          totauxColonnes[2] += row.shifts_matin || 0;
-          totauxColonnes[3] += row.shifts_soir || 0;
-          totauxColonnes[4] += row.samedis_travailles || 0;
-          totauxColonnes[5] += row.dimanches_travailles || 0;
-          totauxColonnes[6] += row.total_ca || 0; // Total CA
-          totauxColonnes[7] += row.total_rh || 0; // Total RH
-        });
-        setTotaux(totauxColonnes);
-      } catch (error) {
-        console.error('Erreur lors de la récupération des indicateurs :', error);
-      }
-    };
-
-    fetchIndicateurs();
-  }, []);
-
+function IndicateursTable({ indicateurs, moyennes }) {
   return (
     <div className="indicateurs-container">
       <table className="indicateurs-table">
@@ -69,8 +14,8 @@ function IndicateursTable() {
             <th>Shifts Soir</th>
             <th>Samedis Travaillés</th>
             <th>Dimanches Travaillés</th>
-            <th>Nombre de CA</th>
-            <th>Nombre de RH</th>
+            <th>Total CA</th>
+            <th>Total RH</th>
           </tr>
         </thead>
         <tbody>
@@ -90,9 +35,9 @@ function IndicateursTable() {
         </tbody>
         <tfoot>
           <tr>
-            <td>Somme</td>
-            {totaux.map((total, index) => (
-              <td key={index}>{total}</td>
+            <td>Moyenne</td>
+            {moyennes.map((moyenne, index) => (
+              <td key={index}>{moyenne}</td>
             ))}
           </tr>
         </tfoot>

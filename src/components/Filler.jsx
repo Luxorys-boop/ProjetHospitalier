@@ -67,6 +67,11 @@ const Filler = ({ refresh }) => {
       const userCycles = cycleShifts[userId];
       Object.keys(userCycles).forEach(cycleId => {
         const shifts = userCycles[cycleId];
+        for(let y = 0 ; y < shifts.length ; y++) {
+          if(typeof shifts[y] == "undefined") {
+            shifts[y] = "RH"
+          }
+        }
         cycleUserExtended.push(extendCycleToNDays(shifts, n));
       });
     });
@@ -85,9 +90,6 @@ const Filler = ({ refresh }) => {
             let p = document.createElement("p");
             if (typeof tbody[x].childNodes[i].childNodes[0] === 'undefined') {
               p.textContent = usersCycle[x][i-1];
-              if (p.textContent === "") {
-                p.textContent = "RH";
-              }
               tbody[x].childNodes[i].appendChild(p);
             }
           }

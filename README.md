@@ -55,11 +55,11 @@ Depuis l'accueil, vous pouvez appuyer sur le bouton "Ajouter" pour créer un nou
 
 ## Construit avec 🌠
 
-- Kylian
-- Mathys
-- Meriem
-- Arwa
-- Nassim
+- ATCHAMA Kylian
+- LEVERRIER Mathys
+- BENNAMA Meriem
+- MOHAMED Arwa
+- AABI Nassim
 
 ## Langages & Frameworks
 

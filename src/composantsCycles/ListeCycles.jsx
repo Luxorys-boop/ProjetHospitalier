@@ -89,6 +89,16 @@ function ListeCycles({ onAjouterCycle }) {
     setFormData([]);
   };
 
+  const confirmerSuppression = (cycleId) => {
+    setCycleASupprimer(cycleId);
+    setPopupSupprimerVisible(true);
+  };
+
+  const annulerSuppression = () => {
+    setCycleASupprimer(null);
+    setPopupSupprimerVisible(false);
+  };
+
   const verifierContraintes = async (cycle) => {
     try {
       const response = await fetch("http://localhost:5001/verify-constraints", {
@@ -96,7 +106,7 @@ function ListeCycles({ onAjouterCycle }) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ cycle }),
       });
-  
+
       const { violations } = await response.json();
       return violations;
     } catch (error) {
@@ -104,7 +114,7 @@ function ListeCycles({ onAjouterCycle }) {
       return [];
     }
   };
-  
+
   const enregistrerModification = async () => {
     // Construire le cycle à partir des modifications
     const cycle = formData.map((shiftNom, index) => {
@@ -112,7 +122,7 @@ function ListeCycles({ onAjouterCycle }) {
       const heureDebut = shift ? shift.heure_debut % 24 : 0;
       const duree = shift ? shift.duree : 0;
       const heureFin = (heureDebut + duree) % 24;
-  
+
       return {
         jour: index + 1,
         shiftId: shift ? shift.id : null,
@@ -122,10 +132,10 @@ function ListeCycles({ onAjouterCycle }) {
         typeRepos: shift ? shift.nom === "RH" : false,
       };
     });
-  
+
     // Vérifier les contraintes
     const violations = await verifierContraintes(cycle);
-  
+
     if (violations.length > 0) {
       const confirmer = window.confirm(
         `Des violations de contraintes ont été détectées :\n\n${violations.join(
@@ -136,13 +146,13 @@ function ListeCycles({ onAjouterCycle }) {
         return; // Ne pas enregistrer les modifications si l'utilisateur annule
       }
     }
-  
+
     // Si l'utilisateur accepte, sauvegarder les modifications
     try {
       for (let i = 0; i < formData.length; i++) {
         const shiftNom = formData[i];
         const jour = i + 1;
-  
+
         await fetch("http://localhost:5001/query", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -160,18 +170,18 @@ function ListeCycles({ onAjouterCycle }) {
           }),
         });
       }
-  
+
       setCycleShifts((prev) => ({
         ...prev,
         [cycleActuel]: formData,
       }));
-  
+
       fermerPopupModifier();
     } catch (err) {
       console.error("Erreur lors de la modification :", err);
     }
   };
-  
+
 
   const supprimerCycle = async () => {
     try {
@@ -205,7 +215,7 @@ function ListeCycles({ onAjouterCycle }) {
     }
   };
 
-  
+
   return (
     <div className="liste-cycles">
       <h2>Gestion des cycles de travail</h2>
@@ -284,8 +294,10 @@ function ListeCycles({ onAjouterCycle }) {
               Êtes-vous sûr de vouloir supprimer le cycle{" "}
               <strong>{cycleNames[cycleASupprimer]}</strong> ?
             </p>
-            <button onClick={supprimerCycle}>Oui</button>
-            <button onClick={annulerSuppression}>Non</button>
+            <div className="actions-cycles">
+              <button onClick={supprimerCycle}>Oui</button>
+              <button onClick={annulerSuppression}>Non</button>
+            </div>
           </div>
         </>
       )}

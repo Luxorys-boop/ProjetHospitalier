@@ -27,7 +27,7 @@ app.use(express.json());
 // Fonction pour déterminer si un jour est un dimanche
 const estDimanche = (index) => {
     const dateActuelle = new Date();
-    const jourDeLaSemaine = (dateActuelle.getDay() + index + 4) % 7;
+    const jourDeLaSemaine = (dateActuelle.getDay() + index - 2) % 7;
     return jourDeLaSemaine === 0;
 };
 
@@ -57,19 +57,41 @@ const verifierReposEntreJournees = (cycle) => {
 
 // contrainte de 36 heures de repos consécutives hebdomadaires
 const verifierReposHebdomadaire = (cycle) => {
-    let reposConsecutifs = 0;
-    for (let shift of cycle) {
-        if (shift.typeRepos == true) {
-            reposConsecutifs += 24; // 1 jour = 24 heures
+    let reposConsecutifs = 0; // En heures
+
+    for (let i = 1; i < cycle.length; i++) {
+        // Calculer l'heure de fin du shift précédent
+        const heureFin = cycle[i - 1].heureDebut + cycle[i - 1].duree;
+
+        // Normaliser les heures dans une plage de 24 heures
+        const heureFinPrecedent = heureFin % 24;
+        const heureDebutActuel = cycle[i].heureDebut % 24;
+
+        // Si le shift précédent est un RH, ajouter 24 heures de repos
+        if (cycle[i - 1].typeRepos === true) {
+            reposConsecutifs += 24;
         } else {
-            reposConsecutifs = 0;
+            // Calculer la différence entre la fin du shift précédent et le début du shift actuel
+            const difference = (heureDebutActuel - heureFinPrecedent + 24) % 24;
+            reposConsecutifs += difference;
         }
+
+        // Vérifier si le repos atteint 36 heures
         if (reposConsecutifs >= 36) {
             return true;
         }
+
+        // Si le shift actuel n'est pas un RH, réinitialiser le compteur
+        if (cycle[i].typeRepos !== true) {
+            reposConsecutifs = 0;
+        }
     }
-    return false;
+
+    return false; // Aucun repos consécutif de 36 heures trouvé
 };
+
+
+
 
 // contrainte de 4 jours de repos sur 2 semaines dont au moins 2 consécutifs dont 1 dimanche
 const verifierReposBihebdomadaire = (cycle) => {

@@ -4,7 +4,6 @@ import Popup from './components/Popup';
 import UtilisateursPage from './components/Utilisateurs';
 import RemoveButton from './components/RemoveSelected';
 import Layout from "./Layout"; 
-import BesoinInfirmier from "./components/BesoinInfirmier";
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 
@@ -158,7 +157,6 @@ function App() {
         <h2>Ajout Utilisateur</h2>
         <UtilisateursPage />
       </Popup>
-      <BesoinInfirmier />
     </Layout>
   );
 }

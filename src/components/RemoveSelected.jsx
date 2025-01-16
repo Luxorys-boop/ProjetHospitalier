@@ -1,17 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from 'react';
 
-function RemoveButton() {
-  const [selectedItems, setSelectedItems] = useState([]);
-
-  // Fonction pour gérer le changement d'état des checkboxes
-  const handleCheckboxChange = (id) => {
-    setSelectedItems((prevSelectedItems) =>
-      prevSelectedItems.includes(id)
-        ? prevSelectedItems.filter((itemId) => itemId !== id)
-        : [...prevSelectedItems, id]
-    );
-  };
-
+function RemoveSelected({ selectedItems, onRemoveComplete }) {
   // Fonction pour supprimer les éléments sélectionnés
   const handleRemoveSelected = async () => {
     try {
@@ -28,8 +17,8 @@ function RemoveButton() {
 
         if (!response.ok) throw new Error("Erreur lors de la suppression.");
       }
-      setSelectedItems([]);  // Réinitialiser les éléments sélectionnés après suppression
       alert("Utilisateurs supprimés avec succès !");
+      onRemoveComplete();
     } catch (err) {
       console.error("Erreur :", err);
       alert(`Erreur : ${err.message}`);
@@ -43,4 +32,4 @@ function RemoveButton() {
   );
 }
 
-export default RemoveButton;
+export default RemoveSelected;

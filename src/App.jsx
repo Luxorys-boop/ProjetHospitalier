@@ -3,18 +3,31 @@ import TableMaker from './components/Tablemaker';
 import Popup from './components/Popup';
 import Navbar from './components/Navbar';
 import UtilisateursPage from './components/Utilisateurs';
-import RemoveSelected from './components/RemoveSelected';
+import RemoveButton from './components/RemoveSelected';
 import Layout from "./Layout"; 
 import BesoinInfirmier from "./components/BesoinInfirmier";
 
 function App() {
   const [buttonPopup, setButtonPopup] = useState(false);
+  const [selectedUsers, setSelectedUsers] = useState([]);
+
+  const handleUserSelectionChange = (userId) => {
+    setSelectedUsers((prevSelectedUsers) =>
+      prevSelectedUsers.includes(userId)
+        ? prevSelectedUsers.filter((id) => id !== userId)
+        : [...prevSelectedUsers, userId]
+    );
+  };
+
+  const handleRemoveComplete = () => {
+    setSelectedUsers([]);
+  };
 
   return (
     <Layout>
       <Navbar />
       <div className="tableContainer">
-        <TableMaker />
+        <TableMaker onUserSelectionChange={handleUserSelectionChange} />
       </div>
       <div className="containerButtons">
         <button
@@ -27,7 +40,7 @@ function App() {
         >
           Ajouter
         </button>
-        <RemoveSelected />
+        <RemoveButton selectedItems={selectedUsers} onRemoveComplete={handleRemoveComplete} />
       </div>
       <Popup trigger={buttonPopup} setTrigger={setButtonPopup}>
         <h2>Ajout Utilisateur</h2>

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import TableUser from './TableUser';
 import "./Tablemaker.css";
 
-function TableMaker() {
+function TableMaker({ onUserSelectionChange }) {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [refresh, setRefresh] = useState(false);
 
@@ -64,7 +64,7 @@ function TableMaker() {
         <TableRow />
       </thead>
       <tbody className="userTable">
-        <TableUser daysInMonth={daysInMonth} refresh={refresh} />
+        <TableUser daysInMonth={daysInMonth} refresh={refresh} onUserSelectionChange={onUserSelectionChange} />
       </tbody>
     </table>
   );

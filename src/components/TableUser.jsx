@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Filler from './Filler';
 
-const TableUser = ({ daysInMonth }) => {
+const TableUser = ({ daysInMonth, refresh }) => {
     const [users, setUsers] = useState([]);
     const [error, setError] = useState(null);
 
@@ -42,7 +42,7 @@ const TableUser = ({ daysInMonth }) => {
                     ))}
                 </tr>
             ))}
-            <Filler />
+            <Filler refresh={refresh} />
         </>
     );
 };

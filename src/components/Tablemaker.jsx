@@ -4,6 +4,7 @@ import "./Tablemaker.css";
 
 function TableMaker() {
   const [currentDate, setCurrentDate] = useState(new Date());
+  const [refresh, setRefresh] = useState(false);
 
   const changeMonth = (delta) => {
     setCurrentDate((prevDate) => {
@@ -11,6 +12,7 @@ function TableMaker() {
       newDate.setMonth(newDate.getMonth() + delta);
       return newDate;
     });
+    setRefresh(prev => !prev);
   };
 
   const year = currentDate.getFullYear();
@@ -62,7 +64,7 @@ function TableMaker() {
         <TableRow />
       </thead>
       <tbody className="userTable">
-        <TableUser daysInMonth={daysInMonth} />
+        <TableUser daysInMonth={daysInMonth} refresh={refresh} />
       </tbody>
     </table>
   );

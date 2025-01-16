@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useCallback } from 'react';
 
-const Filler = () => {
+const Filler = ({ refresh }) => {
   const [cycleShifts, setCycleShifts] = useState({});
   const [error, setError] = useState(null);
 
@@ -51,7 +51,7 @@ const Filler = () => {
 
   useEffect(() => {
     fetchUsersCycles();
-  }, [fetchUsersCycles]);
+  }, [fetchUsersCycles, refresh]);
 
   const extendCycleToNDays = (cycle, n) => {
     const extendedCycle = [];

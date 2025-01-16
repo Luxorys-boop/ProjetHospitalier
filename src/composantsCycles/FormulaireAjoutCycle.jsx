@@ -57,22 +57,22 @@ function FormulaireAjoutCycle({ onFermer }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     if (!nomCycle.trim()) {
       alert("Veuillez saisir un nom pour le cycle.");
       return;
     }
-  
+
     // Construire le cycle à partir des jours sélectionnés
     const cycle = jours.map((shiftId, index) => {
       const shiftIdInt = parseInt(shiftId, 10); // Convertir shiftId en entier
       const shift = shifts.find((s) => s.id === shiftIdInt); // Trouver le shift correspondant
-  
+
       // Ajuster les heures de début et de fin pour rester dans une plage valide
       const heureDebut = shift ? shift.heure_debut % 24 : 0;
       const duree = shift ? shift.duree : 0;
       const heureFin = (heureDebut + duree) % 24;
-  
+
       // Retourner l'objet cycle
       return {
         jour: index % 7 + 1, // Calcul du jour (1 à 7)
@@ -83,10 +83,10 @@ function FormulaireAjoutCycle({ onFermer }) {
         typeRepos: shift ? shift.nom === "RH" : false, // Type de repos
       };
     });
-  
+
     // Vérifier les contraintes
     const violations = await verifierContraintes(cycle);
-  
+
     if (violations.length > 0) {
       // Afficher une popup listant les violations et demander confirmation
       const confirmer = window.confirm(
@@ -98,7 +98,7 @@ function FormulaireAjoutCycle({ onFermer }) {
         return; // Ne pas créer le cycle si l'utilisateur annule
       }
     }
-  
+
     try {
       // Étape 1 : Insérer le cycle
       const cycleResponse = await fetch("http://localhost:5001/query", {
@@ -109,10 +109,10 @@ function FormulaireAjoutCycle({ onFermer }) {
           params: [nomCycle, nombreSemaines],
         }),
       });
-  
+
       const cycleData = await cycleResponse.json();
       const nouveauCycleId = cycleData.insertId;
-  
+
       // Étape 2 : Insérer les shifts pour chaque jour
       for (let i = 0; i < jours.length; i++) {
         const jourShift = jours[i];
@@ -127,14 +127,14 @@ function FormulaireAjoutCycle({ onFermer }) {
           });
         }
       }
-  
+
       alert("Cycle ajouté avec succès !");
       onFermer(); // Fermer le formulaire après validation
     } catch (err) {
       console.error("Erreur lors de l'ajout du cycle :", err);
     }
   };
-  
+
 
   return (
     <>

@@ -82,7 +82,6 @@ function ListeShifts() {
             <th>Nom</th>
             <th>Heure Début</th>
             <th>Durée</th>
-            <th>Besoin Infirmiers</th>
             <th>Actions</th>
           </tr>
         </thead>
@@ -93,7 +92,6 @@ function ListeShifts() {
               <td>{shift.nom}</td>
               <td>{shift.heure_debut || "Non défini"}</td>
               <td>{shift.duree}</td>
-              <td>{shift.besoin_infirmiers}</td>
               <td>
                 <div className="actions-shifts">
                   <button onClick={() => ouvrirFormulaire(shift)}>Modifier</button>

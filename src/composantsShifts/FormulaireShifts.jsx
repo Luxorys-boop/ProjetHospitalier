@@ -4,9 +4,6 @@ function FormulaireShifts({ shift, onFermer }) {
   const [nom, setNom] = useState(shift ? shift.nom : "");
   const [heure_debut, setHeureDebut] = useState(shift ? shift.heure_debut : "");
   const [duree, setDuree] = useState(shift ? shift.duree : "");
-  const [besoin_infirmiers, setBesoinInfirmiers] = useState(
-    shift ? shift.besoin_infirmiers : ""
-  );
 
   // Utiliser useEffect pour réinitialiser les champs lorsque shift change
   useEffect(() => {
@@ -14,12 +11,10 @@ function FormulaireShifts({ shift, onFermer }) {
       setNom(shift.nom);
       setHeureDebut(shift.heure_debut);
       setDuree(shift.duree);
-      setBesoinInfirmiers(shift.besoin_infirmiers);
     } else {
       setNom("");
       setHeureDebut("");
       setDuree("");
-      setBesoinInfirmiers("");
     }
   }, [shift]);
 
@@ -28,12 +23,12 @@ function FormulaireShifts({ shift, onFermer }) {
 
     const url = "http://localhost:5001/query";
     const sql = shift
-      ? "UPDATE shifts SET nom = ?, heure_debut = ?, duree = ?, besoin_infirmiers = ? WHERE id = ?"
-      : "INSERT INTO shifts (nom, heure_debut, duree, besoin_infirmiers) VALUES (?, ?, ?, ?)";
+      ? "UPDATE shifts SET nom = ?, heure_debut = ?, duree = ? WHERE id = ?"
+      : "INSERT INTO shifts (nom, heure_debut, duree) VALUES (?, ?, ?)";
 
     const params = shift
-      ? [nom, heure_debut || null, duree, besoin_infirmiers, shift.id]
-      : [nom, heure_debut || null, duree, besoin_infirmiers];
+      ? [nom, heure_debut || null, duree, shift.id]
+      : [nom, heure_debut || null, duree];
 
     try {
       const response = await fetch(url, {
@@ -76,14 +71,6 @@ function FormulaireShifts({ shift, onFermer }) {
             value={duree}
             onChange={(e) => setDuree(e.target.value)}
             required
-          />
-        </div>
-        <div>
-          <label>Besoin Infirmiers :</label>
-          <input
-            type="number"
-            value={besoin_infirmiers}
-            onChange={(e) => setBesoinInfirmiers(e.target.value)}
           />
         </div>
         <div className="confirm-shifts-boutons">

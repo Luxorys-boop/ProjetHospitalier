@@ -70,6 +70,7 @@ function FormulaireShifts({ shift, onFermer }) {
             type="number"
             value={duree}
             onChange={(e) => setDuree(e.target.value)}
+            min="0"
             required
           />
         </div>

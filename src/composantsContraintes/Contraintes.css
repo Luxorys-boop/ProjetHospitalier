@@ -1,0 +1,105 @@
+.liste-cycles-invalides {
+  font-family: Arial, sans-serif;
+  margin: auto;
+  padding: 20px;
+  max-width: 800px;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.liste-cycles-invalides h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.liste-cycles-invalides p {
+  text-align: center;
+  font-size: 1.1em;
+  color: #555;
+}
+
+.liste-cycles-invalides table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.liste-cycles-invalides thead th {
+  background-color: #f4f4f4;
+  color: #333;
+  text-align: left;
+  padding: 10px;
+  border-bottom: 2px solid #cccccc;
+}
+
+
+.liste-cycles-invalides tbody tr:nth-child(odd) {
+  background-color: #f9f9f9;
+}
+
+.liste-cycles-invalides tbody tr:nth-child(even) {
+  background-color: #ffffff;
+}
+
+.liste-cycles-invalides tbody td {
+  padding: 10px;
+  border-bottom: 1px solid #dddddd;
+}
+
+.liste-cycles-invalides ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.liste-cycles-invalides ul li {
+  background-color: #f1f1f1;
+  margin: 5px 0;
+  padding: 8px;
+  border-radius: 4px;
+  font-size: 0.9em;
+  color: #333;
+}
+
+.liste-cycles-invalides ul li:hover {
+  background-color: #e9ecef;
+}
+
+@media (max-width: 600px) {
+  .liste-cycles-invalides {
+      padding: 15px;
+  }
+
+  .liste-cycles-invalides table,
+  .liste-cycles-invalides thead,
+  .liste-cycles-invalides tbody,
+  .liste-cycles-invalides th,
+  .liste-cycles-invalides td,
+  .liste-cycles-invalides tr {
+      display: block;
+  }
+
+  .liste-cycles-invalides thead tr {
+      display: none;
+  }
+
+  .liste-cycles-invalides tbody tr {
+      margin-bottom: 15px;
+  }
+
+  .liste-cycles-invalides td {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px;
+      border-bottom: 1px solid #ddd;
+  }
+
+  .liste-cycles-invalides td::before {
+      content: attr(data-label);
+      flex-basis: 50%;
+      text-align: left;
+      font-weight: bold;
+      color: #333;
+  }
+}

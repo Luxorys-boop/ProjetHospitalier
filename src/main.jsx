@@ -6,6 +6,7 @@ import App from './App';
 import AppCycles from './composantsCycles/AppCycles';
 import AppShifts from './composantsShifts/AppShifts';
 import AppIndicateurs from './composantsIndicateurs/AppIndicateurs';
+import AppContraintes from './composantsContraintes/AppContraintes';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
@@ -15,6 +16,7 @@ createRoot(document.getElementById('root')).render(
       <Route path="/cycles" element={<AppCycles />} />
       <Route path="/shifts" element={<AppShifts />} />
       <Route path="/indicateurs" element={<AppIndicateurs />} />
+      <Route path="/contraintes" element={<AppContraintes />} />
     </Routes>
     </Router>
   </StrictMode>

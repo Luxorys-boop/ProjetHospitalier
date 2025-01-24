@@ -137,8 +137,7 @@ function UtilisateursPage() {
 
             {/* Boutons pour les opérations CRUD */}
             <div className="containerButtons">
-                <button onClick={handleGetAll}>Get All</button>
-                <button onClick={handleCreate}>Create</button>
+                <button onClick={handleCreate}>Créer</button>
                 <select onChange={(e) => setCycleID(e.target.value)}>
                     <Option></Option>
                 </select>

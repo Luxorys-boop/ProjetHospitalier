@@ -13,7 +13,7 @@ function Popup(props) {
                         }
                         document.getElementsByClassName("theadmaker")[0].style.position = "sticky";
                         console.log(document.getElementsByClassName("besoins-table"));
-                    }} className="close-btn">Close</button>
+                    }} className="close-btn">Fermer</button>
                     { props.children }
                 </div>
                 

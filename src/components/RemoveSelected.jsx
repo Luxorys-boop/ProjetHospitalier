@@ -27,7 +27,7 @@ function RemoveSelected({ selectedItems, onRemoveComplete }) {
 
   return (
     <>
-      <button onClick={handleRemoveSelected}>Remove Selected</button>
+      <button onClick={handleRemoveSelected}>Supprimer la selection</button>
     </>
   );
 }

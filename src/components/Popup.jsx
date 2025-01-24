@@ -7,8 +7,12 @@ function Popup(props) {
                 <div className='containerButtons'>
                     <button onClick={() => {
                         props.setTrigger(false);
+                        let tab = document.getElementsByTagName("table");
+                        for(let i = 0 ; i < tab.length ; i++) {
+                            tab[i].style.display = "revert";
+                        }
                         document.getElementsByClassName("theadmaker")[0].style.position = "sticky";
-                        document.getElementsByClassName("theadmaker")[1].style.display = "revert";
+                        console.log(document.getElementsByClassName("besoins-table"));
                     }} className="close-btn">Close</button>
                     { props.children }
                 </div>

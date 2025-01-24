@@ -144,8 +144,10 @@ function App() {
             setButtonPopup(true);
             let title = document.getElementsByClassName("theadmaker")[0];
             title.style.position = "inherit";
-            let title2 = document.getElementsByClassName("theadmaker")[1];
-            title2.style.display = "none";
+            let tab = document.getElementsByTagName("table");
+            for(let i = 0 ; i < tab.length ; i++) {
+              tab[i].style.display = "None";
+            }
           }}
           className="addButton"
         >

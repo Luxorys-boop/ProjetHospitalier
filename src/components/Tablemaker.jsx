@@ -3,19 +3,9 @@ import TableUser from './TableUser';
 import "./Tablemaker.css";
 
 function TableMaker({ onUserSelectionChange }) {
-  
-  /**
-   * Gestion d'état contenant des datas sur la date actuelle qui se met à jour continuellement.
-   * Gestion d'état du refresh contenant un boleén, si on le turn ON il refresh le Filler.
-   */
   const [currentDate, setCurrentDate] = useState(new Date());
   const [refresh, setRefresh] = useState(false);
 
-  /**
-   * Fonction utilisant un paramètre (1 ou -1) -> Selon le bouton. Permettant d'effectuer des changements sur le tableau actuel
-   * Tout en mettant à jour le composant Filler ce qui permet d'adapter le tableau en toutes circonstances.
-   * @param {*} delta 
-   */
   const changeMonth = (delta) => {
     setCurrentDate((prevDate) => {
       const newDate = new Date(prevDate);
@@ -25,67 +15,72 @@ function TableMaker({ onUserSelectionChange }) {
     setRefresh(prev => !prev);
   };
 
-  /*Constantes permettant de stocker les datas retournées par les fonctions définies ci dessous */
-
   const year = currentDate.getFullYear();
   const month = getMonth(currentDate.getMonth());
-  const startDay = new Date(year, currentDate.getMonth(), 1).getDay(); // Jour de la semaine du 1er du mois
+  const startDay = new Date(year, currentDate.getMonth(), 1).getDay();
   const daysInMonth = getDaysInMonth(year, currentDate.getMonth());
 
   /**
-   * Fonction permettant de créer le début du tableau et son nombre de jours.
-   * @returns Retoune chaque jour de la semaine précédé de son initial : L1 M2 Me3 ect...
+   * Fonction permettant de créer les jours dans le tableau.
    */
   const TableRow = () => {
     const days = Array.from({ length: daysInMonth }, (_, index) => {
-      const dayOfWeek = (startDay + index) % 7; // Calculer le jour de la semaine
-      return `${getDay(dayOfWeek)}${index + 1} `;
+      const dayOfWeek = (startDay + index) % 7;
+      const isWeekEnd = (index + 1) % 7 === 0; // Ajouter une classe pour la séparation des semaines
+      return (
+        <th key={index} className={isWeekEnd ? "week-separator" : ""}>
+          {getDay(dayOfWeek)}{index + 1}
+        </th>
+      );
     });
 
     return (
       <tr>
         <th>ID</th>
-        {days.map((day, index) => (
-          <th key={index}>{day}</th>
-        ))}
+        {days}
       </tr>
     );
   };
+
   /**
-   * Retourne chaque semaine précédé de l'inital S : e.g : S1, S2, S3. En fonction du mois dans l'année.
-   * @returns Les semaines dans le mois
+   * Fonction permettant d'afficher les semaines avec séparation.
    */
   const WeekRow = () => {
     const weeks = Array.from({ length: Math.ceil(daysInMonth / 7) }, (_, index) => {
       return `S${getWeekOfYear(year, currentDate.getMonth(), index * 7 + 1)}`;
     });
+
     return (
       <tr>
-        <th colSpan={1}></th>
-        {weeks.map((week, index) => (<th key={index} colSpan="7">{week}</th>))}
+        <th></th>
+        {weeks.map((week, index) => (
+          <th key={index} colSpan="7" className="week-separator">{week}</th>
+        ))}
       </tr>
     );
   };
 
   return (
-    <table className="tablemaker">
-      <thead className='theadmaker'>
-        <tr>
-          <th colSpan="100%">
-            <div className="container">
-              <button className="left-button" onClick={() => changeMonth(-1)}>Précédent</button>
-              <h3 className="tablemaker-title">{month} {year}</h3>
-              <button className="right-button" onClick={() => changeMonth(1)}>Suivant</button>
-            </div>
-          </th>
-        </tr>
-        <WeekRow />
-        <TableRow />
-      </thead>
-      <tbody className="userTable">
-        <TableUser daysInMonth={daysInMonth} refresh={refresh} onUserSelectionChange={onUserSelectionChange} />
-      </tbody>
-    </table>
+    <div className="table-container">
+      <div className="month-navigation">
+        <button className="nav-button" onClick={() => changeMonth(-1)}>←</button>
+        <h3 className="month-title">{month} {year}</h3>
+        <button className="nav-button" onClick={() => changeMonth(1)}>→</button>
+      </div>
+      <table className="tablemaker">
+        <thead className='theadmaker'>
+          <WeekRow />
+          <TableRow />
+        </thead>
+        <tbody className="userTable">
+          <TableUser 
+            daysInMonth={daysInMonth} 
+            refresh={refresh} 
+            onUserSelectionChange={onUserSelectionChange} 
+          />
+        </tbody>
+      </table>
+    </div>
   );
 }
 
@@ -97,7 +92,10 @@ function getDay(index) {
 
 // Fonction pour obtenir le nom du mois en fonction de l'index
 function getMonth(index) {
-  const monthsOfYear = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"];
+  const monthsOfYear = [
+    "Janvier", "Février", "Mars", "Avril", "Mai", "Juin", 
+    "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"
+  ];
   return monthsOfYear[index];
 }
 

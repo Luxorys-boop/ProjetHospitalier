@@ -168,4 +168,154 @@
     padding: 8px;
     text-align: left;
   }
+  /* Conteneur principal */
+.table-container {
+
+  padding-top: 60px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+  max-width: none;
   
+}
+
+
+
+/* Barre de navigation des mois */
+.month-navigation {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #fff;
+  padding: 8px 80px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  border-bottom-left-radius: 20px;
+  border-bottom-right-radius: 20px;
+}
+
+.month-title {
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+  margin: 0 20px;
+}
+
+.nav-button {
+  background: none;
+  border: none;
+  font-size: 1.8rem;
+  color: #2086df;
+  cursor: pointer;
+}
+
+.nav-button:hover {
+  opacity: 0.7;
+}
+
+/* Tableau général */
+.tablemaker {
+  font-family: 'Arial', sans-serif;
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #ffffff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  overflow: hidden;
+  border-spacing: 0;
+  margin-left: 0px;
+
+}
+
+/* En-tête du tableau */
+.tablemaker thead th {
+  background-color: #2c88f8;  /* Bleu foncé */
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: bold;
+  padding: 15px;
+  text-transform: uppercase;
+}
+
+/* Lignes alternées pour différencier les utilisateurs */
+.tablemaker tbody tr:nth-child(even) {
+  background-color: #f9f9f9; /* Gris très clair */
+}
+
+.tablemaker tbody tr:hover {
+  background-color: #e0f0ff; /* Bleu très clair au survol */
+}
+
+/* Cellules générales */
+.tablemaker th,
+.tablemaker td {
+  padding: 12px 15px;
+  text-align: center;
+  font-size: 14px;
+}
+
+/* Séparation verticale entre les semaines - appliquée à tout le tableau */
+.tablemaker th.week-separator,
+.tablemaker td.week-separator {
+  border-right: 2px solid #d1d1d1 !important; /* Bordure plus visible */
+}
+
+/* Couleurs pour différencier les semaines et les jours */
+.tablemaker thead tr:first-child th {
+  background-color: #2c88f8; /* Bleu foncé pour les jours */
+}
+
+.tablemaker thead tr:nth-child(2) th {
+  background-color: #80bfff; /* Bleu plus clair pour les semaines */
+}
+
+/* Correction du centrage */
+.table-container {
+  margin-left: auto;
+  margin-right: auto;
+}
+  
+  .containerButtons button {
+    padding: 10px 20px;
+    margin-top: 25px;
+    background-color: #007bff;
+    /* Bleu principal */
+    color: #ffffff;
+    /* Texte blanc */
+    border: none;
+    border-radius: 5px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    margin-inline: 10px;
+  }
+  
+  .containerButtons button:hover {
+    background-color: #0056b3;
+    /* Bleu légèrement plus foncé */
+    transform: translateY(-2px);
+  }
+  
+  .tableContainer {
+    max-height: 664px;
+    overflow-y: auto;
+  }
+
+  .container {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .left-button, .right-button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+  }

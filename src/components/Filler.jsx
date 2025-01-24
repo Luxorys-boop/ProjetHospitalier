@@ -79,16 +79,20 @@ const Filler = ({ refresh }) => {
       Array.from(docs).forEach(doc => {
         let tbody = doc.childNodes;
         let usersCycle = adaptToInsert(31);
-
-        for (let x = 0; x < tbody.length; x++) {
-          for (let i = 1; i < tbody[x].childNodes.length; i++) {
-            let p = document.createElement("p");
-            if (typeof tbody[x].childNodes[i].childNodes[0] === 'undefined') {
-              p.textContent = usersCycle[x][i-1];
-              tbody[x].childNodes[i].appendChild(p);
+        if(usersCycle.length == 0) {
+          console.log("Liste cycle vide...")
+        } else {
+          for (let x = 0; x < tbody.length; x++) {
+            for (let i = 1; i < tbody[x].childNodes.length; i++) {
+              let p = document.createElement("p");
+              if (typeof tbody[x].childNodes[i].childNodes[0] === 'undefined') {
+                p.textContent = usersCycle[x][i-1];
+                tbody[x].childNodes[i].appendChild(p);
+              }
             }
           }
         }
+        
       });
     }
   };

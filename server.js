@@ -27,7 +27,7 @@ app.use(express.json());
 // Fonction pour déterminer si un jour est un dimanche
 const estDimanche = (index) => {
     const dateActuelle = new Date();
-    const jourDeLaSemaine = (dateActuelle.getDay() + index - 2) % 7;
+    const jourDeLaSemaine = (dateActuelle.getDay() + index - 1) % 7;
     return jourDeLaSemaine === 0;
 };
 

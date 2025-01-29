@@ -9,8 +9,10 @@ function Option({ setCycleID }) {
   // Mapping entre quotité et nombre de RH/semaine attendu
   const quotiteToRH = {
     "100%": 2,
-    "66%": 3,
-    "50%": 4
+    "70%": 3,
+    "50%": 4,
+    "30%": 5,
+    "10%": 6,
   };
 
   // Charger tous les cycles depuis la base de données
@@ -86,8 +88,10 @@ function Option({ setCycleID }) {
       <select value={quotite} onChange={(e) => setQuotite(e.target.value)}>
         <option value="">-- Sélectionnez une quotité --</option>
         <option value="100%">100% (2 RH/semaine)</option>
-        <option value="66%">66% (3 RH/semaine)</option>
+        <option value="70%">70% (3 RH/semaine)</option>
         <option value="50%">50% (4 RH/semaine)</option>
+        <option value="30%">30% (5 RH/semaine)</option>
+        <option value="10%">10% (6 RH/semaine)</option>
       </select>
 
       {/* Sélection des cycles filtrés (s'affiche uniquement si une quotité est sélectionnée) */}

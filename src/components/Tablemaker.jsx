@@ -1,60 +1,78 @@
-import React, { useState } from 'react';
-import TableUser from './TableUser';
+import React, { useState, useEffect } from "react";
+import TableUser from "./TableUser";
 import "./Tablemaker.css";
 
 function TableMaker({ onUserSelectionChange }) {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [refresh, setRefresh] = useState(false);
+  const [assignations, setAssignations] = useState([]);
 
+  // Fonction pour changer le mois et rafraîchir les données
   const changeMonth = (delta) => {
     setCurrentDate((prevDate) => {
       const newDate = new Date(prevDate);
       newDate.setMonth(newDate.getMonth() + delta);
       return newDate;
     });
-    setRefresh(prev => !prev);
+    setRefresh((prev) => !prev);
   };
+
+  // Récupérer les assignations de la base de données
+  const fetchAssignations = async () => {
+    try {
+      const response = await fetch("http://localhost:5001/get-assignations", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          mois: currentDate.getMonth() + 1,
+          annee: currentDate.getFullYear(),
+        }),
+      });
+      if (!response.ok) throw new Error("Erreur lors de la récupération des assignations.");
+      const data = await response.json();
+      setAssignations(data);
+    } catch (error) {
+      console.error("Erreur lors du chargement des assignations :", error);
+    }
+  };
+
+  // Charger les assignations à chaque changement de mois ou rafraîchissement
+  useEffect(() => {
+    fetchAssignations();
+  }, [currentDate, refresh]);
 
   const year = currentDate.getFullYear();
   const month = getMonth(currentDate.getMonth());
   const startDay = new Date(year, currentDate.getMonth(), 1).getDay();
   const daysInMonth = getDaysInMonth(year, currentDate.getMonth());
 
-  /**
-   * Fonction permettant de créer les jours dans le tableau.
-   */
+  // Générer les en-têtes des jours
   const TableRow = () => {
     const days = Array.from({ length: daysInMonth }, (_, index) => {
       const dayOfWeek = (startDay + index) % 7;
-      const isWeekEnd = (index + 1) % 7 === 0; // Ajouter une classe pour la séparation des semaines
-      return (
-        <th key={index} className={isWeekEnd ? "week-separator" : ""}>
-          {getDay(dayOfWeek)}{index + 1}
-        </th>
-      );
+      return `${getDay(dayOfWeek)}${index + 1}`;
     });
 
     return (
       <tr>
         <th>ID</th>
-        {days}
+        {days.map((day, index) => (
+          <th key={index}>{day}</th>
+        ))}
       </tr>
     );
   };
 
-  /**
-   * Fonction permettant d'afficher les semaines avec séparation.
-   */
+  // Générer les en-têtes des semaines
   const WeekRow = () => {
     const weeks = Array.from({ length: Math.ceil(daysInMonth / 7) }, (_, index) => {
       return `S${getWeekOfYear(year, currentDate.getMonth(), index * 7 + 1)}`;
     });
-
     return (
       <tr>
-        <th></th>
+        <th colSpan={1}></th>
         {weeks.map((week, index) => (
-          <th key={index} colSpan="7" className="week-separator">{week}</th>
+          <th key={index} colSpan="7">{week}</th>
         ))}
       </tr>
     );
@@ -62,21 +80,25 @@ function TableMaker({ onUserSelectionChange }) {
 
   return (
     <div className="table-container">
+      {/* Navigation pour défiler les mois */}
       <div className="month-navigation">
         <button className="nav-button" onClick={() => changeMonth(-1)}>←</button>
         <h3 className="month-title">{month} {year}</h3>
         <button className="nav-button" onClick={() => changeMonth(1)}>→</button>
       </div>
+
+      {/* Tableau principal */}
       <table className="tablemaker">
-        <thead className='theadmaker'>
+        <thead className="theadmaker">
           <WeekRow />
           <TableRow />
         </thead>
         <tbody className="userTable">
-          <TableUser 
-            daysInMonth={daysInMonth} 
-            refresh={refresh} 
-            onUserSelectionChange={onUserSelectionChange} 
+          <TableUser
+            daysInMonth={daysInMonth}
+            refresh={refresh}
+            assignations={assignations}
+            onUserSelectionChange={onUserSelectionChange}
           />
         </tbody>
       </table>
@@ -90,10 +112,10 @@ function getDay(index) {
   return daysOfWeek[index];
 }
 
-// Fonction pour obtenir le nom du mois en fonction de l'index
+// Fonction pour obtenir le mois en fonction de l'index
 function getMonth(index) {
   const monthsOfYear = [
-    "Janvier", "Février", "Mars", "Avril", "Mai", "Juin", 
+    "Janvier", "Février", "Mars", "Avril", "Mai", "Juin",
     "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"
   ];
   return monthsOfYear[index];

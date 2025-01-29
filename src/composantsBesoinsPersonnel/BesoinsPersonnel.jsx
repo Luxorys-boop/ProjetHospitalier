@@ -59,7 +59,6 @@ function BesoinsPersonnel() {
 
   // Calculer le besoin (Y) et les assignations (X) pour une cellule donnée
   const calculerXY = (jour, shiftId) => {
-    // Aucune modification ici pour conserver le décalage attendu
     const jourAjuste = new Date(jour);
     jourAjuste.setDate(jourAjuste.getDate() + 1); // Ajustement pour les assignations
     const jourAjusteISO = jourAjuste.toISOString().split("T")[0];
@@ -72,16 +71,27 @@ function BesoinsPersonnel() {
     const x = assignationsPourShift.length;
     const y = besoin ? besoin.nombre_personnel : 0;
 
-    return `${x}/${y}`;
+    return { x, y, affichage: `${x}/${y}` };
+  };
+
+  // Déterminer la couleur personnalisée en fonction de x et y
+  const getCouleurTexte = (x, y) => {
+    if (x > y) return "#135be6";  // Bleu pour surcharge
+    if (x < y) return "#DD761C";  // Orange pour sous-effectif
+    return "#179d5c";              // Vert pour équilibre parfait
   };
 
   // Modifier une cellule (besoin)
   const modifierCellule = async (jour, shiftId, nouveauBesoin) => {
+    const jourAjuste = new Date(jour);
+    jourAjuste.setDate(jourAjuste.getDate() + 2);
+    const jourAjusteISO = jourAjuste.toISOString().split("T")[0];
+
     try {
       const response = await fetch("http://localhost:5001/update-besoin", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ jour, shift_id: shiftId, nombre_personnel: nouveauBesoin }),
+        body: JSON.stringify({ jour: jourAjusteISO, shift_id: shiftId, nombre_personnel: nouveauBesoin }),
       });
 
       if (response.ok) {
@@ -98,7 +108,7 @@ function BesoinsPersonnel() {
   // Gestion du clic sur une cellule
   const handleCelluleClick = (jourISO, shiftId, besoinActuel) => {
     const jourAjuste = new Date(jourISO);
-    jourAjuste.setDate(jourAjuste.getDate() + 1); // Décalage pour affichage utilisateur
+    jourAjuste.setDate(jourAjuste.getDate() + 2); // Décalage visuel de 2 jours pour le prompt
     const jourAjusteISO = jourAjuste.toISOString().split("T")[0];
 
     const nouveauBesoin = prompt(
@@ -152,7 +162,6 @@ function BesoinsPersonnel() {
 
   return (
     <div className="besoins-personnel">
-      <h1>Besoins en Personnel</h1>
       <div className="navigation-mois">
         <button onClick={() => handleMoisChange(-1)}>← Mois Précédent</button>
         <span>{moisCourant.toLocaleString("fr-FR", { month: "long", year: "numeric" })}</span>
@@ -176,14 +185,16 @@ function BesoinsPersonnel() {
             <tr key={shift.id}>
               <td>{shift.nom}</td>
               {genererEntetes().map(({ dateISO }, i) => {
-                const besoinActuel = calculerXY(dateISO, shift.id);
+                const { x, y, affichage } = calculerXY(dateISO, shift.id);
+                const couleurTexte = getCouleurTexte(x, y);
+
                 return (
                   <td
                     key={i}
-                    onClick={() => handleCelluleClick(dateISO, shift.id, besoinActuel)}
-                    style={{ cursor: "pointer", backgroundColor: "#f9f9f9" }}
+                    onClick={() => handleCelluleClick(dateISO, shift.id, affichage)}
+                    style={{ cursor: "pointer", color: couleurTexte }}
                   >
-                    {besoinActuel}
+                    {affichage}
                   </td>
                 );
               })}

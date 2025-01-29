@@ -6,6 +6,7 @@ function BesoinsPersonnel() {
   const [moisCourant, setMoisCourant] = useState(new Date());
   const [shifts, setShifts] = useState([]);
   const [besoins, setBesoins] = useState([]);
+  const [assignations, setAssignations] = useState([]);
   const [formulaireVisible, setFormulaireVisible] = useState(false);
   const joursAbrégés = ["D", "L", "M", "ME", "J", "V", "S"];
 
@@ -16,7 +17,7 @@ function BesoinsPersonnel() {
       const data = await response.json();
       setShifts(data.filter((shift) => shift.nom !== "RH" && shift.nom !== "CA"));
     } catch (error) {
-      console.error("Erreur lors du chargement des shifts :", error);
+      console.error("Erreur chargement des shifts :", error);
     }
   };
 
@@ -34,8 +35,85 @@ function BesoinsPersonnel() {
       const data = await response.json();
       setBesoins(data);
     } catch (error) {
-      console.error("Erreur lors du chargement des besoins :", error);
+      console.error("Erreur chargement des besoins :", error);
     }
+  };
+
+  // Charger les assignations
+  const chargerAssignations = async () => {
+    try {
+      const mois = moisCourant.getMonth() + 1;
+      const annee = moisCourant.getFullYear();
+      const response = await fetch("http://localhost:5001/get-assignations", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ mois, annee }),
+      });
+      if (!response.ok) throw new Error(`Erreur HTTP ${response.status}`);
+      const data = await response.json();
+      setAssignations(data);
+    } catch (error) {
+      console.error("Erreur chargement des assignations :", error);
+    }
+  };
+
+  // Calculer le besoin (Y) et les assignations (X) pour une cellule donnée
+  const calculerXY = (jour, shiftId) => {
+    // Aucune modification ici pour conserver le décalage attendu
+    const jourAjuste = new Date(jour);
+    jourAjuste.setDate(jourAjuste.getDate() + 1); // Ajustement pour les assignations
+    const jourAjusteISO = jourAjuste.toISOString().split("T")[0];
+
+    const besoin = besoins.find((b) => b.jour === jourAjusteISO && b.shift_id === shiftId);
+    const assignationsPourShift = assignations.filter(
+      (a) => a.jour === jourAjusteISO && a.shift_id === shiftId
+    );
+
+    const x = assignationsPourShift.length;
+    const y = besoin ? besoin.nombre_personnel : 0;
+
+    return `${x}/${y}`;
+  };
+
+  // Modifier une cellule (besoin)
+  const modifierCellule = async (jour, shiftId, nouveauBesoin) => {
+    try {
+      const response = await fetch("http://localhost:5001/update-besoin", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ jour, shift_id: shiftId, nombre_personnel: nouveauBesoin }),
+      });
+
+      if (response.ok) {
+        console.log("Besoin mis à jour avec succès !");
+        await chargerBesoins();
+      } else {
+        alert("Erreur lors de la mise à jour du besoin.");
+      }
+    } catch (error) {
+      console.error("Erreur lors de la mise à jour :", error);
+    }
+  };
+
+  // Gestion du clic sur une cellule
+  const handleCelluleClick = (jourISO, shiftId, besoinActuel) => {
+    const jourAjuste = new Date(jourISO);
+    jourAjuste.setDate(jourAjuste.getDate() + 1); // Décalage pour affichage utilisateur
+    const jourAjusteISO = jourAjuste.toISOString().split("T")[0];
+
+    const nouveauBesoin = prompt(
+      `Modifier le besoin pour ${jourAjusteISO} (${shiftId}):`,
+      besoinActuel.split("/")[1]
+    );
+
+    if (nouveauBesoin !== null && !isNaN(parseInt(nouveauBesoin, 10))) {
+      modifierCellule(jourISO, shiftId, parseInt(nouveauBesoin, 10));
+    }
+  };
+
+  // Modifier le mois affiché
+  const handleMoisChange = (increment) => {
+    setMoisCourant(new Date(moisCourant.getFullYear(), moisCourant.getMonth() + increment, 1));
   };
 
   // Supprimer tous les besoins
@@ -55,61 +133,21 @@ function BesoinsPersonnel() {
     }
   };
 
-  // Modifier une cellule
-  const modifierCellule = async (jour, shiftId, nouveauBesoin) => {
-    try {
-      const response = await fetch("http://localhost:5001/update-besoin", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ jour, shift_id: shiftId, nombre_personnel: nouveauBesoin }),
-      });
-      if (response.ok) {
-        await chargerBesoins(); // Recharger les besoins après modification
-      } else {
-        alert("Erreur lors de la mise à jour du besoin.");
-      }
-    } catch (error) {
-      console.error("Erreur lors de la modification :", error);
-    }
-  };
-
-  // Gestion du clic sur une cellule
-  const handleCelluleClick = (jour, shiftId, besoinActuel) => {
-    // Simuler un clic sur le jour suivant
-    const jourSuivant = new Date(jour);
-    jourSuivant.setDate(jourSuivant.getDate() + 1);
-    const jourSuivantISO = jourSuivant.toISOString().split("T")[0];
-
-    const nouveauBesoin = prompt(
-      `Modifier le besoin pour le jour ${jourSuivantISO} et le shift ${shiftId}:`,
-      besoinActuel || 0
-    );
-    if (nouveauBesoin !== null) {
-      modifierCellule(jourSuivantISO, shiftId, parseInt(nouveauBesoin, 10));
-    }
-  };
-
-  const handleMoisChange = (increment) => {
-    setMoisCourant(new Date(moisCourant.getFullYear(), moisCourant.getMonth() + increment, 1));
-  };
-
+  // Générer les entêtes (jours) pour le tableau
   const genererEntetes = () => {
     const joursDansMois = new Date(moisCourant.getFullYear(), moisCourant.getMonth() + 1, 0).getDate();
     return [...Array(joursDansMois)].map((_, i) => {
       const dateCourante = new Date(moisCourant.getFullYear(), moisCourant.getMonth(), i + 1);
       const jourDeLaSemaine = dateCourante.getDay();
-      return `${joursAbrégés[jourDeLaSemaine]}${i + 1}`;
+      const dateISO = dateCourante.toISOString().split("T")[0];
+      return { affichage: `${joursAbrégés[jourDeLaSemaine]}${i + 1}`, dateISO };
     });
-  };
-
-  const obtenirDateParIndex = (index) => {
-    const date = new Date(moisCourant.getFullYear(), moisCourant.getMonth(), index + 1);
-    return date.toISOString().split("T")[0];
   };
 
   useEffect(() => {
     chargerShifts();
     chargerBesoins();
+    chargerAssignations();
   }, [moisCourant]);
 
   return (
@@ -128,28 +166,27 @@ function BesoinsPersonnel() {
         <thead>
           <tr>
             <th>Shifts</th>
-            {genererEntetes().map((entete, i) => <th key={i}>{entete}</th>)}
+            {genererEntetes().map(({ affichage }, i) => (
+              <th key={i}>{affichage}</th>
+            ))}
           </tr>
         </thead>
         <tbody>
           {shifts.map((shift) => (
             <tr key={shift.id}>
               <td>{shift.nom}</td>
-              {[...Array(new Date(moisCourant.getFullYear(), moisCourant.getMonth() + 1, 0).getDate())].map(
-                (_, i) => {
-                  const jourISO = obtenirDateParIndex(i);
-                  const besoin = besoins.find((b) => b.shift_id === shift.id && b.jour === jourISO);
-                  return (
-                    <td
-                      key={i}
-                      onClick={() => handleCelluleClick(jourISO, shift.id, besoin?.nombre_personnel)}
-                      style={{ cursor: "pointer" }}
-                    >
-                      {besoin ? besoin.nombre_personnel : "--"}
-                    </td>
-                  );
-                }
-              )}
+              {genererEntetes().map(({ dateISO }, i) => {
+                const besoinActuel = calculerXY(dateISO, shift.id);
+                return (
+                  <td
+                    key={i}
+                    onClick={() => handleCelluleClick(dateISO, shift.id, besoinActuel)}
+                    style={{ cursor: "pointer", backgroundColor: "#f9f9f9" }}
+                  >
+                    {besoinActuel}
+                  </td>
+                );
+              })}
             </tr>
           ))}
         </tbody>

@@ -1,54 +1,11 @@
 import React, { useState } from "react";
 import Option from "./Option";
+
 function UtilisateursPage() {
-    const [id, setId] = useState("");
-    const [cycle_id, setCycleID] = useState("");
     const [nom, setNom] = useState("");
+    const [cycle_id, setCycleID] = useState(""); // Stocke l'ID du cycle sélectionné
     const [result, setResult] = useState(null);
     const [error, setError] = useState(null);
-
-    // Fonction pour récupérer tous les utilisateurs
-    const handleGetAll = async () => {
-        try {
-            const response = await fetch("http://localhost:5001/query", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    sql: "SELECT * FROM utilisateurs",
-                }),
-            });
-
-            if (!response.ok) throw new Error("Erreur lors de la récupération.");
-            const data = await response.json();
-
-            // Convertir tous les utilisateurs en JSON formaté
-            setResult(data.length > 0 ? JSON.stringify(data, null, 2) : "Aucun utilisateur trouvé.");
-            setError(null);
-        } catch (err) {
-            setError(err.message);
-        }
-    };
-
-    // Fonction pour récupérer un utilisateur par ID
-    const handleGetById = async () => {
-        try {
-            const response = await fetch("http://localhost:5001/query", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    sql: "SELECT * FROM utilisateurs WHERE id = ?",
-                    params: [id],
-                }),
-            });
-
-            if (!response.ok) throw new Error("Erreur lors de la récupération.");
-            const data = await response.json();
-            setResult(data.length > 0 ? JSON.stringify(data[0], null, 2) : "Utilisateur introuvable.");
-            setError(null);
-        } catch (err) {
-            setError(err.message);
-        }
-    };
 
     const handleCreate = async () => {
         try {
@@ -96,48 +53,6 @@ function UtilisateursPage() {
         }
     };
 
-    // Fonction pour mettre à jour un utilisateur
-    const handleUpdate = async () => {
-        try {
-            const response = await fetch("http://localhost:5001/query", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    sql: "UPDATE utilisateurs SET nom = ? WHERE id = ?",
-                    params: [nom, id],
-                }),
-            });
-
-            if (!response.ok) throw new Error("Erreur lors de la mise à jour.");
-            const data = await response.json();
-            setResult(data.affectedRows > 0 ? "Utilisateur mis à jour avec succès." : "Aucun utilisateur trouvé.");
-            setError(null);
-        } catch (err) {
-            setError(err.message);
-        }
-    };
-
-    // Fonction pour supprimer un utilisateur
-    const handleDelete = async () => {
-        try {
-            const response = await fetch("http://localhost:5001/query", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    sql: "DELETE FROM utilisateurs WHERE id = ?",
-                    params: [id],
-                }),
-            });
-
-            if (!response.ok) throw new Error("Erreur lors de la suppression.");
-            const data = await response.json();
-            setResult(data.affectedRows > 0 ? "Utilisateur supprimé avec succès." : "Aucun utilisateur trouvé.");
-            setError(null);
-        } catch (err) {
-            setError(err.message);
-        }
-    };
-
     return (
         <div>
             {/* Formulaire pour les champs */}
@@ -150,17 +65,12 @@ function UtilisateursPage() {
                     placeholder="Nom de l'utilisateur"
                 />
                 </label>
-                
             </div>
 
             {/* Boutons pour les opérations CRUD */}
             <div className="containerButtons">
-                <button onClick={handleGetAll}>Get All</button>
-                <button onClick={handleCreate}>Create</button>
-                <select onChange={(e) => setCycleID(e.target.value)}>
-                    <Option></Option>
-                </select>
-                
+                <button onClick={handleCreate}>Créer</button>
+                <Option setCycleID={setCycleID} />
             </div>
 
             {/* Affichage des résultats ou des erreurs */}

@@ -27,7 +27,7 @@ app.use(express.json());
 // Fonction pour déterminer si un jour est un dimanche
 const estDimanche = (index) => {
     const dateActuelle = new Date();
-    const jourDeLaSemaine = (dateActuelle.getDay() + index - 2) % 7;
+    const jourDeLaSemaine = (dateActuelle.getDay() + index - 1) % 7;
     return jourDeLaSemaine === 0;
 };
 
@@ -372,6 +372,81 @@ app.post('/query', async (req, res) => {
         res.status(500).send(`Erreur lors de l'exécution de la requête : ${error.message}`);
     }
 });
+
+
+
+// Endpoint : récupérer les assignations pour un mois spécifique
+app.post("/get-assignations", async (req, res) => {
+  const { mois, annee } = req.body;
+
+  if (!mois || !annee) {
+    return res.status(400).json({ error: "Mois et année sont requis." });
+  }
+
+  try {
+    const sql = `
+      SELECT DATE_FORMAT(a.jour, '%Y-%m-%d') AS jour, a.shift_id, a.user_id 
+      FROM assignations a
+      WHERE MONTH(a.jour) = ? AND YEAR(a.jour) = ?;
+    `;
+    const [rows] = await pool.execute(sql, [mois, annee]);
+    res.status(200).json(rows);
+  } catch (error) {
+    console.error("Erreur récupération des assignations :", error);
+    res.status(500).json({ error: "Erreur lors de la récupération des assignations." });
+  }
+});
+
+// Endpoint : générer des assignations pour un utilisateur
+app.post("/generate-assignations", async (req, res) => {
+  const { userId, cycleId } = req.body;
+
+  if (!userId || !cycleId) {
+    return res.status(400).json({ error: "User ID et Cycle ID sont requis." });
+  }
+
+  try {
+    const connection = await pool.getConnection();
+    
+    const [cycleShifts] = await connection.execute(
+      "SELECT jour, shift_id FROM cycle_shifts WHERE cycle_id = ? ORDER BY jour",
+      [cycleId]
+    );
+
+    if (cycleShifts.length === 0) {
+      return res.status(404).json({ error: "Aucune donnée trouvée pour ce cycle." });
+    }
+
+    const currentYear = new Date().getFullYear();
+    const assignations = [];
+
+    for (let month = 0; month < 12; month++) {
+      const daysInMonth = new Date(currentYear, month + 1, 0).getDate();
+      for (let day = 1; day <= daysInMonth; day++) {
+        const cycleDayIndex = (day - 1) % cycleShifts.length;
+        const shift = cycleShifts[cycleDayIndex];
+
+        if (shift) {
+          assignations.push([`${currentYear}-${month + 1}-${day}`, shift.shift_id, userId]);
+        }
+      }
+    }
+
+    await connection.query(
+      "INSERT INTO assignations (jour, shift_id, user_id) VALUES ?",
+      [assignations]
+    );
+
+    connection.release();
+    res.json({ success: true, message: "Assignations créées avec succès." });
+
+  } catch (error) {
+    console.error("Erreur génération des assignations :", error);
+    res.status(500).json({ error: "Erreur lors de la génération des assignations." });
+  }
+});
+
+
 
 // Middleware pour gérer les erreurs non capturées
 app.use((err, res) => {

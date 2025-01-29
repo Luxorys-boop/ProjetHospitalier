@@ -19,17 +19,18 @@ function AppIndicateurs() {
               SELECT 
                 u.id AS utilisateur_id,
                 u.nom AS utilisateur_nom,
-                COUNT(DISTINCT CASE WHEN s.besoin_infirmiers > 0 THEN cs.id END) AS besoins_non_couverts,
-                COUNT(DISTINCT CASE WHEN s.besoin_infirmiers < 0 THEN cs.id END) AS surplus,
+                COUNT(DISTINCT CASE WHEN s.besoin_infirmiers > 0 THEN a.id END) AS besoins_non_couverts,
+                COUNT(DISTINCT CASE WHEN s.besoin_infirmiers < 0 THEN a.id END) AS surplus,
                 COUNT(CASE WHEN s.nom = 'Matin' THEN 1 END) AS shifts_matin,
                 COUNT(CASE WHEN s.nom = 'Soir' THEN 1 END) AS shifts_soir,
-                COUNT(CASE WHEN ((DAYOFWEEK(cs.jour) + 4) % 7) = 4 THEN 1 END) AS samedis_travailles,
-                COUNT(CASE WHEN ((DAYOFWEEK(cs.jour) + 4) % 7) = 5 THEN 1 END) AS dimanches_travailles,
+                COUNT(CASE WHEN DAYOFWEEK(a.jour) = 7 THEN 1 END) AS samedis_travailles,
+                COUNT(CASE WHEN DAYOFWEEK(a.jour) = 1 THEN 1 END) AS dimanches_travailles,
                 COUNT(CASE WHEN s.nom = 'CA' THEN 1 END) AS total_ca,
                 COUNT(CASE WHEN s.nom = 'RH' THEN 1 END) AS total_rh
-              FROM utilisateurs u
-              LEFT JOIN cycle_shifts cs ON u.cycle_id = cs.cycle_id
-              LEFT JOIN shifts s ON cs.shift_id = s.id
+              FROM assignations a
+              JOIN utilisateurs u ON a.user_id = u.id  -- Corrected join
+              JOIN shifts s ON a.shift_id = s.id
+              WHERE YEAR(a.jour) = YEAR(CURDATE())  -- Filtrer l'année actuelle
               GROUP BY u.id;
             `,
           }),

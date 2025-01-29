@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import FormulaireAjoutCycle from "../composantsCycles/FormulaireAjoutCycle"; // Import de la popup
 
 function Option({ setCycleID }) {
   const [quotite, setQuotite] = useState(""); // Quotité sélectionnée
   const [cycles, setCycles] = useState([]); // Liste des cycles
   const [filteredCycles, setFilteredCycles] = useState([]); // Cycles filtrés selon la quotité
   const [selectedCycle, setSelectedCycle] = useState(""); // Cycle sélectionné
+  const [popupAjoutVisible, setPopupAjoutVisible] = useState(false); // Affichage de la popup
 
   // Mapping entre quotité et nombre de RH/semaine attendu
   const quotiteToRH = {
@@ -94,8 +96,8 @@ function Option({ setCycleID }) {
         <option value="10%">10% (6 RH/semaine)</option>
       </select>
 
-      {/* Sélection des cycles filtrés (s'affiche uniquement si une quotité est sélectionnée) */}
-      {quotite && (
+      {/* Sélection des cycles filtrés */}
+      {quotite && filteredCycles.length > 0 && (
         <select value={selectedCycle} onChange={handleCycleChange}>
           <option value="">-- Sélectionnez un cycle ! --</option>
           {filteredCycles.map((cycle) => (
@@ -105,6 +107,17 @@ function Option({ setCycleID }) {
           ))}
         </select>
       )}
+
+      {/* Message si aucun cycle ne correspond à la quotité sélectionnée */}
+      {quotite && filteredCycles.length === 0 && (
+        <>
+          <p>Aucun cycle ne correspond à cette quotité.</p>
+          <button onClick={() => setPopupAjoutVisible(true)}>Ajouter un cycle</button>
+        </>
+      )}
+
+      {/* Popup d'ajout de cycle */}
+      {popupAjoutVisible && <FormulaireAjoutCycle onFermer={() => setPopupAjoutVisible(false)} />}
     </>
   );
 }

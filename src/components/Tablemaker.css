@@ -6,6 +6,7 @@
   margin-right: auto;
   width: 100%;
   max-width: none;
+  margin-top: -60px;
   
 }
 
@@ -148,5 +149,4 @@
     border: none;
     padding: 10px;
     cursor: pointer;
-  }  
-  
+  }

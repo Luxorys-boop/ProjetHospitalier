@@ -76,7 +76,7 @@ function BesoinsPersonnel() {
 
   // Déterminer la couleur personnalisée en fonction de x et y
   const getCouleurTexte = (x, y) => {
-    if (x > y) return "#135be6";  // Bleu pour surcharge
+    if (x > y) return "#135be6";  // Violet pour surassignation
     if (x < y) return "#DD761C";  // Orange pour sous-effectif
     return "#179d5c";              // Vert pour équilibre parfait
   };
@@ -108,7 +108,7 @@ function BesoinsPersonnel() {
   // Gestion du clic sur une cellule
   const handleCelluleClick = (jourISO, shiftId, besoinActuel) => {
     const jourAjuste = new Date(jourISO);
-    jourAjuste.setDate(jourAjuste.getDate() + 2); // Décalage visuel de 2 jours pour le prompt
+    jourAjuste.setDate(jourAjuste.getDate() + 1); // Décalage visuel de 2 jours pour le prompt
     const jourAjusteISO = jourAjuste.toISOString().split("T")[0];
 
     const nouveauBesoin = prompt(

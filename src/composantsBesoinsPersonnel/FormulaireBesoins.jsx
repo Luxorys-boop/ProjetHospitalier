@@ -40,6 +40,7 @@ function FormulaireBesoins({ shifts, mois, annee, onFermer, onEnregistrer }) {
       });
       console.log("Ajout des besoins effectué.");
       onEnregistrer();
+      onFermer();
     } catch (error) {
       console.error("Erreur lors de l'enregistrement des besoins :", error);
     }

@@ -1,152 +1,156 @@
 /* Fond pour le pop-up */
 .formulaire-besoins-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-  }
-  
-  /* Conteneur principal du pop-up */
-  .formulaire-besoins-popup {
-    background: white;
-    border-radius: 8px;
-    padding: 20px;
-    width: 70%;
-    max-width: 1500px;
-    max-height: 90vh;
-    overflow-y: auto;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  }
-  
-  /* Titre principal */
-  .formulaire-besoins-popup h2 {
-    text-align: center;
-    margin-bottom: 15px;
-    color: #0d3b6b;
-    font-size: 22px;
-  }
-  
-  /* Conteneur de la semaine */
-  .semaine-container {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr); /* 3 colonnes par ligne */
-    gap: 15px;
-    margin-top: 20px;
-    justify-items: center;
-  }
-  
-  /* Styles pour les conteneurs des jours */
-  .jour-besoin {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start; /* Les éléments restent alignés vers le haut */
-    background: #f4f4f4;
-    border: 1px solid #ddd;
-    border-radius: 12px;
-    padding: 15px;
-    text-align: center;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s, box-shadow 0.2s;
-    width: 90%; /* Ajuste la largeur à l'intérieur du grid */
-    max-width: 250px;
-  }
-  
-  .jour-besoin:hover {
-    transform: scale(1.02);
-    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
-  }
-  
-  /* Centrer le titre et ajouter du style */
-  .jour-besoin h3 {
-    font-size: 16px;
-    margin-bottom: 15px;
-    color: #333;
-    text-align: center; /* Assure un centrage horizontal */
-  }
-  
-  /* Conteneur des shifts */
-  .shift-besoin {
-    display: flex;
-    align-items: center; /* Aligne les éléments verticalement */
-    justify-content: space-between; /* Distribue l'espace entre le label et l'input */
-    margin-bottom: 10px;
-    width: 100%; /* Prend tout l'espace du conteneur parent */
-    gap: 10px; /* Ajoute un espace entre le label et l'input */
-  }
-  
-  /* Label à gauche */
-  .shift-besoin label {
-    font-size: 14px;
-    color: #555;
-    flex: 0 0 auto; /* Garde une taille fixe */
-    white-space: nowrap; /* Empêche le label de passer à la ligne */
-  }
-  
-  /* Input stylisé */
-  .shift-besoin input {
-    flex: 1; /* Prend tout l'espace restant */
-    padding: 8px 12px; /* Ajoute une marge interne pour agrandir */
-    font-size: 14px;
-    border: 1px solid #ddd;
-    border-radius: 6px;
-    text-align: center;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    outline: none;
-    transition: all 0.2s ease-in-out;
-  }
-  
-  /* Placeholder pour les inputs */
-  .shift-besoin input::placeholder {
-    color: #aaa;
-    font-size: 13px;
-  }
-  
-  /* Effet au focus */
-  .shift-besoin input:focus {
-    border: 1px solid #007bff;
-    box-shadow: 0 4px 8px rgba(0, 123, 255, 0.2);
-  }
-  
-  /* Boutons */
-  .actions {
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-    margin-top: 15px;
-  }
-  
-  .btn-submit,
-  .btn-cancel {
-    padding: 10px 20px;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 14px;
-  }
-  
-  .btn-submit {
-    background: #007bff;
-    color: white;
-    transition: background 0.3s ease;
-  }
-  
-  .btn-submit:hover {
-    background: #0056b3;
-  }
-  
-  .btn-cancel {
-    background: #f44336;
-    color: white;
-    transition: background 0.3s ease;
-  }
-  
-  .btn-cancel:hover {
-    background: #d32f2f;
-  }
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+/* Conteneur principal du pop-up */
+.formulaire-besoins-popup {
+  background: white;
+  border-radius: 8px;
+  padding: 20px;
+  width: 70%;
+  max-width: 1500px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Titre principal */
+.formulaire-besoins-popup h2 {
+  text-align: center;
+  margin-bottom: 15px;
+  color: #0d3b6b;
+  font-size: 22px;
+}
+
+/* Conteneur de la semaine */
+.semaine-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* 3 colonnes par ligne */
+  gap: 15px;
+  margin-top: 20px;
+  justify-items: center;
+}
+
+/* Styles pour les conteneurs des jours */
+.jour-besoin {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start; /* Les éléments restent alignés vers le haut */
+  background: #f4f4f4;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  padding: 15px;
+  text-align: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s, box-shadow 0.2s;
+  width: 90%; /* Ajuste la largeur à l'intérieur du grid */
+  max-width: 250px;
+}
+
+.jour-besoin:hover {
+  transform: scale(1.02);
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+}
+
+/* Centrer le titre et ajouter du style */
+.jour-besoin h3 {
+  font-size: 16px;
+  margin-bottom: 15px;
+  color: #333;
+  text-align: center; /* Assure un centrage horizontal */
+}
+
+/* Conteneur des shifts */
+.shift-besoin {
+  display: flex;
+  align-items: center; /* Aligne les éléments verticalement */
+  justify-content: space-between; /* Distribue l'espace entre le label et l'input */
+  margin-bottom: 10px;
+  width: 100%; /* Prend tout l'espace du conteneur parent */
+  gap: 10px; /* Ajoute un espace entre le label et l'input */
+}
+
+/* Label à gauche */
+.shift-besoin label {
+  font-size: 14px;
+  color: #555;
+  flex: 0 0 auto; /* Garde une taille fixe */
+  white-space: nowrap; /* Empêche le label de passer à la ligne */
+}
+
+/* Input stylisé */
+.shift-besoin input {
+  flex: 1; /* Prend tout l'espace restant */
+  padding: 8px 12px; /* Ajoute une marge interne pour agrandir */
+  font-size: 14px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  text-align: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  outline: none;
+  transition: all 0.2s ease-in-out;
+}
+
+/* Placeholder pour les inputs */
+.shift-besoin input::placeholder {
+  color: #aaa;
+  font-size: 13px;
+}
+
+/* Effet au focus */
+.shift-besoin input:focus {
+  border: 1px solid #007bff;
+  box-shadow: 0 4px 8px rgba(0, 123, 255, 0.2);
+}
+
+/* Boutons */
+.actions {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 15px;
+}
+
+.btn-submit,
+.btn-cancel {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.btn-submit {
+  background: #007bff;
+  color: white;
+  transition: background 0.3s ease;
+  font-weight: bold;
+
+}
+
+.btn-submit:hover {
+  background: #0056b3;
+}
+
+.btn-cancel {
+  background: #feafa9;
+  color: rgb(238, 11, 11);
+  transition: background 0.3s ease;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.btn-cancel:hover{
+  background: #e29994;
+}

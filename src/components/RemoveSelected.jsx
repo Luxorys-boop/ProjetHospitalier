@@ -1,4 +1,7 @@
 import React, { useState } from 'react';
+import removeIcon from '../images/2.svg';
+import "../index.css";
+
 
 function RemoveSelected({ selectedItems, onRemoveComplete }) {
   // Fonction pour supprimer les éléments sélectionnés
@@ -27,7 +30,9 @@ function RemoveSelected({ selectedItems, onRemoveComplete }) {
 
   return (
     <>
-      <button onClick={handleRemoveSelected}>Supprimer la selection</button>
+      <button onClick={handleRemoveSelected} className="supp-button">
+      <img src={removeIcon} alt="Supprimer" />
+    </button>
     </>
   );
 }

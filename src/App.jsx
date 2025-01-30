@@ -7,6 +7,8 @@ import Layout from "./Layout";
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 import BesoinsPersonnel from './composantsBesoinsPersonnel/BesoinsPersonnel';
+import addIcon from './images/1.svg'; // Import de l'image SVG
+import "./index.css";
 
 function App() {
   const [buttonPopup, setButtonPopup] = useState(false);
@@ -99,25 +101,32 @@ function App() {
         </button>
       </div>
 
-      <div className="tableContainer">
-        <TableMaker onUserSelectionChange={handleUserSelectionChange} />
-      </div>
+      
       <div className="containerButtons">
-        <button
+        <button 
           onClick={() => {
             setButtonPopup(true);
             let title = document.getElementsByClassName("theadmaker")[0];
             title.style.position = "inherit";
             let tab = document.getElementsByTagName("table");
-            for(let i = 0 ; i < tab.length ; i++) {
+            for (let i = 0; i < tab.length; i++) {
               tab[i].style.display = "None";
             }
           }}
-          className="addButton"
+          className="custom-button" 
         >
-          Ajouter
+          <img
+            src={addIcon}
+            alt="Ajouter"
+          />
         </button>
+
         <RemoveButton selectedItems={selectedUsers} onRemoveComplete={handleRemoveComplete} />
+      </div>
+
+      {/* Contenu principal avec tableau */}
+      <div className="tableContainer">
+        <TableMaker onUserSelectionChange={handleUserSelectionChange} />
       </div>
 
       <Popup trigger={buttonPopup} setTrigger={setButtonPopup}>

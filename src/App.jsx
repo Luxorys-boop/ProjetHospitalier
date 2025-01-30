@@ -7,7 +7,7 @@ import Layout from "./Layout";
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 import BesoinsPersonnel from './composantsBesoinsPersonnel/BesoinsPersonnel';
-import addIcon from './images/1.svg'; // Import de l'image SVG
+import addIcon from '../images/1.svg'; // Import de l'image SVG
 import "./index.css";
 
 function App() {

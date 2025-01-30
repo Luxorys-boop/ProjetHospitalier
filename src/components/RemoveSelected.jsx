@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import removeIcon from '../images/2.svg';
+import removeIcon from '../../images/2.svg';
 import "../index.css";
 
 

@@ -91,3 +91,14 @@
   background-color: #e6f1ff; /* Bleu clair */
   color: #003d80; /* Bleu plus foncé */
 }
+
+/* Style du logo dans le menu hamburger */
+img {
+  width: 80px;  /* Largeur du logo */
+  height: auto;  /* Garde les proportions */
+  display: block;  /* Pour centrer l'image */
+  margin: 20px auto;  /* Centrer horizontalement et ajouter un espace autour */
+  margin-bottom: 20px;
+  border-radius: 10px;  /* Coins arrondis */
+}
+

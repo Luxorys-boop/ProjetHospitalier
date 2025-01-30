@@ -1,32 +1,46 @@
 .indicateurs-container {
   max-height: 400px;
   overflow-y: auto;
-  border: 1px solid #ccc;
-  border-radius: 8px;
+  border-radius: 12px; /* Radius plus grand pour correspondre */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Légère ombre pour l’effet */
   margin: 20px auto;
   width: 90%;
+  background-color: #ffffff;
 }
 
 .indicateurs-table {
   width: 100%;
   border-collapse: collapse;
-  text-align: center;
+  background-color: #ffffff;
+  font-family: 'Arial', sans-serif;
+  border-spacing: 0;
 }
 
 .indicateurs-table th,
 .indicateurs-table td {
-  padding: 15px;
-  border: 1px solid #ccc;
+  padding: 12px 15px;
   text-align: center;
+  font-size: 14px;
+  border: none; /* Pas de bordures visibles entre les cellules */
+}
+
+/* Lignes alternées pour différencier les entrées */
+.indicateurs-table tbody tr:nth-child(even) {
+  background-color: #f9f9f9; /* Gris très clair */
+}
+
+.indicateurs-table tbody tr:hover {
+  background-color: #e0f0ff; /* Bleu très clair au survol */
 }
 
 .indicateurs-table thead th {
   position: sticky;
   top: 0;
-  background-color: #cce7ff;
-  color: black;
-  text-align: center;
+  background-color: #2c88f8; /* Bleu foncé habituel */
+  color: white;
   text-transform: uppercase;
+  font-weight: bold;
+  padding: 15px;
   z-index: 2;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
@@ -34,36 +48,37 @@
 .indicateurs-table tfoot td {
   position: sticky;
   bottom: 0;
-  background-color: #f0f0f0;
-  color: black;
+  background-color: #eaf4ff; /* Bleu clair pour le pied de table */
+  color: #333;
   font-weight: bold;
-  text-align: center;
+  padding: 15px;
   z-index: 2;
   box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
 }
 
 .appindicateurs {
   padding: 20px;
+  background-color: #f4faff; /* Fond léger similaire aux autres sections */
 }
 
+.indicateurs-header {
+  text-align: center;
+  font-size: 32px;
+  margin: 0;
+  padding-top: 0;
+  color: #003366; /* Bleu foncé habituel pour les titres */
+  font-weight: bold;
+}
+
+/* Responsive : Réduction des tailles sur petit écran */
 @media (max-width: 768px) {
   .indicateurs-container {
     width: 95%;
     padding: 5px;
   }
 
-  .indicateurs-table th, .indicateurs-table td {
+  .indicateurs-table th,
+  .indicateurs-table td {
     padding: 10px;
-    border: 1px solid #ccc;
   }
-}
-
-.indicateurs-header {
-  position: relative;
-  text-align: center;
-  font-size: 32px;
-  margin: 0;
-  padding-top: 0px;
-  color: #333333;
-  font-weight: bold;
 }

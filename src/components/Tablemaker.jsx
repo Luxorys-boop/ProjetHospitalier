@@ -1,21 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import TableUser from "./TableUser";
 import "./Tablemaker.css";
 
-function TableMaker({ onUserSelectionChange }) {
-  const [currentDate, setCurrentDate] = useState(new Date());
-  const [refresh, setRefresh] = useState(false);
+function TableMaker({ onUserSelectionChange, refresh, currentDate }) {
   const [assignations, setAssignations] = useState([]);
-
-  // Fonction pour changer le mois et rafraîchir les données
-  const changeMonth = (delta) => {
-    setCurrentDate((prevDate) => {
-      const newDate = new Date(prevDate);
-      newDate.setMonth(newDate.getMonth() + delta);
-      return newDate;
-    });
-    setRefresh((prev) => !prev);
-  };
 
   // Récupérer les assignations de la base de données
   const fetchAssignations = async () => {
@@ -80,13 +68,6 @@ function TableMaker({ onUserSelectionChange }) {
 
   return (
     <div className="table-container">
-      {/* Navigation pour défiler les mois */}
-      <div className="month-navigation">
-        <button className="nav-button" onClick={() => changeMonth(-1)}>←</button>
-        <h3 className="month-title">{month} {year}</h3>
-        <button className="nav-button" onClick={() => changeMonth(1)}>→</button>
-      </div>
-
       {/* Tableau principal */}
       <table className="tablemaker">
         <thead className="theadmaker">

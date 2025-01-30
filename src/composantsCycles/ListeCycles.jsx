@@ -218,12 +218,15 @@ function ListeCycles({ onAjouterCycle }) {
 
   return (
     <div className="liste-cycles">
-      <h2>Gestion des cycles de travail</h2>
+      <h2 className="h2G">Gestion des cycles de travail</h2>
 
+      <button className="ajouter-cycles-bouton" onClick={onAjouterCycle}>
+        Ajouter Cycle
+      </button>
       <table>
         <thead>
           <tr>
-            <th>Nom du Cycle</th>
+            <th>Nom</th>
             {Array.from({ length: maxJours }).map((_, index) => (
               <th key={index}>Jour {index + 1}</th>
             ))}
@@ -246,9 +249,7 @@ function ListeCycles({ onAjouterCycle }) {
         </tbody>
       </table>
 
-      <button className="ajouter-cycles-bouton" onClick={onAjouterCycle}>
-        Ajouter Cycle
-      </button>
+
 
       {popupModifierVisible && (
         <>

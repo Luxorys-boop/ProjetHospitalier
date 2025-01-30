@@ -26,7 +26,7 @@ function AppShifts() {
   return (
     <Layout>
     <div className="appshifts">
-      <h1>Gestion des Shifts</h1>
+      <h1 className="h1S">Gestion des Shifts</h1>
       <ListeShifts onAjouterShift={handleAjouterShift} onEditerShift={handleEditerShift} />
       {formulaireVisible && (
         <FormulaireShifts shift={shiftEdition} onFermer={handleFermerFormulaire} />

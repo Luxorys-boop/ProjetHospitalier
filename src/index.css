@@ -10,6 +10,7 @@
   background: none !important;
   border: none; 
   padding: 0;
+
 }
 
 .custom-button img {
@@ -30,4 +31,41 @@
   height: 40px;
   cursor: pointer;
   margin-left: -40px;
+}
+
+/* Barre de navigation des mois */
+.month-navigation {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #fff;
+  padding: 8px 80px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  border-bottom-left-radius: 20px;
+  border-bottom-right-radius: 20px;
+}
+
+.nav-button {
+  background: none;
+  border: none;
+  font-size: 1.8rem;
+  color: #2086df;
+  cursor: pointer;
+  font-weight: bold;
+  
+}
+
+.nav-button:hover {
+  opacity: 0.7;
+}
+
+.month-title {
+  font-size: 16px;
+  font-weight: bold;
+  color: #333;
+  margin: 0 20px;
 }

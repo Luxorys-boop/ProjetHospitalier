@@ -86,27 +86,33 @@ function Option({ setCycleID }) {
 
   return (
     <>
-      {/* Sélection de la quotité */}
-      <select value={quotite} onChange={(e) => setQuotite(e.target.value)}>
-        <option value="">-- Sélectionnez une quotité --</option>
-        <option value="100%">100% (2 RH/semaine)</option>
-        <option value="70%">70% (3 RH/semaine)</option>
-        <option value="50%">50% (4 RH/semaine)</option>
-        <option value="30%">30% (5 RH/semaine)</option>
-        <option value="10%">10% (6 RH/semaine)</option>
-      </select>
+    <select 
+      className="popup-select-quotite"
+      value={quotite} 
+      onChange={(e) => setQuotite(e.target.value)}
+    >
+      <option value="">-- Sélectionnez une quotité --</option>
+      <option value="100%">100% (2 RH/semaine)</option>
+      <option value="70%">70% (3 RH/semaine)</option>
+      <option value="50%">50% (4 RH/semaine)</option>
+      <option value="30%">30% (5 RH/semaine)</option>
+      <option value="10%">10% (6 RH/semaine)</option>
+    </select>
 
-      {/* Sélection des cycles filtrés */}
-      {quotite && filteredCycles.length > 0 && (
-        <select value={selectedCycle} onChange={handleCycleChange}>
-          <option value="">-- Sélectionnez un cycle ! --</option>
-          {filteredCycles.map((cycle) => (
-            <option key={cycle.cycle_id} value={cycle.nom_cycle}>
-              Cycle : {cycle.nom_cycle}
-            </option>
-          ))}
-        </select>
-      )}
+    {quotite && filteredCycles.length > 0 && (
+      <select 
+        className="popup-select-cycles"
+        value={selectedCycle} 
+        onChange={handleCycleChange}
+      >
+        <option value="">-- Sélectionnez un cycle ! --</option>
+        {filteredCycles.map((cycle) => (
+          <option key={cycle.cycle_id} value={cycle.nom_cycle}>
+            Cycle : {cycle.nom_cycle}
+          </option>
+        ))}
+      </select>
+)}
 
       {/* Message si aucun cycle ne correspond à la quotité sélectionnée */}
       {quotite && filteredCycles.length === 0 && (

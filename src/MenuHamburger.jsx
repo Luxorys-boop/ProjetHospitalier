@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import './MenuHamburger.css';
+import logo from './images/logo.png';
 
 function MenuHamburger() {
   const [isOpen, setIsOpen] = useState(false);
@@ -21,6 +22,10 @@ function MenuHamburger() {
           <button className="close-icon" onClick={toggleMenu}>
             X
           </button>
+
+          <img src={logo} alt="logo" />
+
+          
           <ul className="menu-list">
             <li>
               <Link to="/" onClick={toggleMenu}>Accueil</Link>

@@ -7,12 +7,23 @@ import Layout from "./Layout";
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 import BesoinsPersonnel from './composantsBesoinsPersonnel/BesoinsPersonnel';
-import addIcon from '../images/1.svg'; // Import de l'image SVG
+import addIcon from './images/1.svg';
 import "./index.css";
 
 function App() {
   const [buttonPopup, setButtonPopup] = useState(false);
+  const [refresh, setRefresh] = useState(false);
   const [selectedUsers, setSelectedUsers] = useState([]);
+  const [currentDate, setCurrentDate] = useState(new Date());  // Date partagée
+
+  // Fonction commune pour changer le mois
+  const changeMonth = (delta) => {
+    setCurrentDate((prevDate) => {
+      const newDate = new Date(prevDate);
+      newDate.setMonth(newDate.getMonth() + delta);
+      return newDate;
+    });
+  };
 
   const handleUserSelectionChange = (userId) => {
     setSelectedUsers((prevSelectedUsers) =>
@@ -24,6 +35,10 @@ function App() {
 
   const handleRemoveComplete = () => {
     setSelectedUsers([]);
+  };
+
+  const refreshTable = () => {
+    setRefresh((prev) => !prev);
   };
 
   const downloadPDF = () => {
@@ -101,18 +116,16 @@ function App() {
         </button>
       </div>
 
-      
+      {/* Navigation partagée */}
+      <div className="month-navigation">
+        <button className="nav-button" onClick={() => changeMonth(-1)}>← </button>
+        <span className='month-title'>{currentDate.toLocaleString("fr-FR", { month: "long", year: "numeric" })}</span>
+        <button className="nav-button" onClick={() => changeMonth(1)}> →</button>
+      </div>
+
       <div className="containerButtons">
         <button 
-          onClick={() => {
-            setButtonPopup(true);
-            let title = document.getElementsByClassName("theadmaker")[0];
-            title.style.position = "inherit";
-            let tab = document.getElementsByTagName("table");
-            for (let i = 0; i < tab.length; i++) {
-              tab[i].style.display = "None";
-            }
-          }}
+          onClick={() => setButtonPopup(true)}
           className="custom-button" 
         >
           <img
@@ -124,16 +137,15 @@ function App() {
         <RemoveButton selectedItems={selectedUsers} onRemoveComplete={handleRemoveComplete} />
       </div>
 
-      {/* Contenu principal avec tableau */}
       <div className="tableContainer">
-        <TableMaker onUserSelectionChange={handleUserSelectionChange} />
+        <TableMaker onUserSelectionChange={handleUserSelectionChange} refresh={refresh} currentDate={currentDate} />
       </div>
 
       <Popup trigger={buttonPopup} setTrigger={setButtonPopup}>
-        <h2>Ajout Utilisateur</h2>
-        <UtilisateursPage />
+        <UtilisateursPage setPopupOpen={setButtonPopup} onUserCreated={refreshTable} />
       </Popup>
-      <BesoinsPersonnel />
+
+      <BesoinsPersonnel currentDate={currentDate} />
     </Layout>
   );
 }

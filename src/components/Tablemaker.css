@@ -1,6 +1,5 @@
 /* Conteneur principal */
 .table-container {
-
   padding-top: 60px;
   margin-left: auto;
   margin-right: auto;
@@ -9,8 +8,6 @@
   margin-top: -60px;
   
 }
-
-
 
 /* Barre de navigation des mois */
 .month-navigation {
@@ -123,6 +120,7 @@
     cursor: pointer;
     transition: background-color 0.3s ease, transform 0.2s ease;
     margin-inline: 10px;
+    margin-bottom: -30px;
   }
   
   .containerButtons button:hover {
@@ -149,4 +147,6 @@
     border: none;
     padding: 10px;
     cursor: pointer;
-  }
+  }  
+  
+  

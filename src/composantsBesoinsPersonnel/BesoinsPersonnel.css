@@ -1,78 +1,98 @@
 .besoins-personnel {
-    padding: 20px;
-    font-family: Arial, sans-serif;
-  }
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
 
-  .navigation-mois {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 20px;
-  }
+.navigation-mois {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+  margin-top: 20px;
+}
 
-  .navigation-mois button {
-    background-color: #007bff;
-    color: white;
-    border: none;
-    padding: 10px 15px;
-    border-radius: 5px;
-    cursor: pointer;
-  }
+.navigation-mois button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+}
 
-  .besoins-table {
-    width: 100%;
-    border-collapse: collapse;
-    overflow-y: auto;
-  }
+.besoins-table {
+  width: 100%;
+  border-collapse: collapse;
+  overflow-y: auto;   
+}
 
-  .besoins-table th,
-  .besoins-table td {
-    border: 1px solid #ddd;
-    padding: 10px;
-    text-align: center;
-  }
+.besoins-table th,
+.besoins-table td {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align: center;
+}
 
-  .besoins-table th {
-    background-color: #f4faff;
-    color: #333;
-    font-weight: bold;
-  }
+.besoins-table th {
+  background-color: #f4faff;
+  color: #333;
+  font-weight: bold;
+}
 
-  .besoins-table td {
-    cursor: pointer;
-  }
+.besoins-table td {
+  cursor: pointer;
+}
 
-  .besoins-table td:hover {
-    background-color: #eaf4ff;
-  }
-  .ajouter-besoin {
-    margin: 20px 0;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    padding: 10px 15px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 14px;
-    font-weight: bold;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-  }
+.besoins-table td:hover {
+  background-color: #eaf4ff;
+}
+.ajouter-besoin {
+  margin: 20px 0;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: bold;
+  transition: background-color 0.3s ease, transform 0.2s ease;
 
-  .ajouter-besoin:hover {
-    background-color: #0056b3;
-    transform: translateY(-2px);
-  }
+}
 
-  .supprimer-tous-besoins{
-    margin-left : 20px;
-    background-color: #fec4c4;
-    color: rgb(239, 0, 0);
-    border: none;
-    padding: 10px 15px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 14px;
-    font-weight: bold;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-  }
+.ajouter-besoin:hover {
+  background-color: #0056b3;
+  transform: translateY(-2px);
+}
+
+.supprimer-tous-besoins{
+  margin-left : 20px;
+  background-color: #fec4c4;
+  color: rgb(239, 0, 0);
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: bold;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+
+.table-container {
+  max-width: 100%;
+  overflow-x: auto;
+  padding-bottom: 5px; /* Évite tout chevauchement */
+}
+
+.ajouter-besoin, 
+.supprimer-tous-besoins {
+    z-index: 10; /* Priorité plus haute pour l’interaction */
+    display: inline-block;
+    position: relative;
+}
+
+
+
+

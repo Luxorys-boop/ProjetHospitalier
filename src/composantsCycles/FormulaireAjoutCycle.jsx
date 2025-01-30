@@ -143,11 +143,11 @@ function FormulaireAjoutCycle({ onFermer }) {
         <h2>Ajouter un Nouveau Cycle</h2>
         <form onSubmit={handleSubmit}>
           <div className="nom-cycle">
-            <label>Nom du Cycle</label>
             <input
               type="text"
               value={nomCycle}
               onChange={(e) => setNomCycle(e.target.value)}
+              placeholder="Nom du Cycle"
               required
             />
           </div>

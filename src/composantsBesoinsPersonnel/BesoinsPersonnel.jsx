@@ -2,8 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./BesoinsPersonnel.css";
 import FormulaireBesoins from "./FormulaireBesoins";
 
-function BesoinsPersonnel() {
-  const [moisCourant, setMoisCourant] = useState(new Date());
+function BesoinsPersonnel({ currentDate, refresh }) {
   const [shifts, setShifts] = useState([]);
   const [besoins, setBesoins] = useState([]);
   const [assignations, setAssignations] = useState([]);
@@ -24,8 +23,8 @@ function BesoinsPersonnel() {
   // Charger les besoins
   const chargerBesoins = async () => {
     try {
-      const mois = moisCourant.getMonth() + 1;
-      const annee = moisCourant.getFullYear();
+      const mois = currentDate.getMonth() + 1;
+      const annee = currentDate.getFullYear();
       const response = await fetch("http://localhost:5001/get-besoins", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -42,8 +41,8 @@ function BesoinsPersonnel() {
   // Charger les assignations
   const chargerAssignations = async () => {
     try {
-      const mois = moisCourant.getMonth() + 1;
-      const annee = moisCourant.getFullYear();
+      const mois = currentDate.getMonth() + 1;
+      const annee = currentDate.getFullYear();
       const response = await fetch("http://localhost:5001/get-assignations", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -121,11 +120,6 @@ function BesoinsPersonnel() {
     }
   };
 
-  // Modifier le mois affiché
-  const handleMoisChange = (increment) => {
-    setMoisCourant(new Date(moisCourant.getFullYear(), moisCourant.getMonth() + increment, 1));
-  };
-
   // Supprimer tous les besoins
   const supprimerTousLesBesoins = async () => {
     if (window.confirm("Êtes-vous sûr de vouloir supprimer tous les besoins personnels ?")) {
@@ -145,9 +139,9 @@ function BesoinsPersonnel() {
 
   // Générer les entêtes (jours) pour le tableau
   const genererEntetes = () => {
-    const joursDansMois = new Date(moisCourant.getFullYear(), moisCourant.getMonth() + 1, 0).getDate();
+    const joursDansMois = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0).getDate();
     return [...Array(joursDansMois)].map((_, i) => {
-      const dateCourante = new Date(moisCourant.getFullYear(), moisCourant.getMonth(), i + 1);
+      const dateCourante = new Date(currentDate.getFullYear(), currentDate.getMonth(), i + 1);
       const jourDeLaSemaine = dateCourante.getDay();
       const dateISO = dateCourante.toISOString().split("T")[0];
       return { affichage: `${joursAbrégés[jourDeLaSemaine]}${i + 1}`, dateISO };
@@ -158,56 +152,51 @@ function BesoinsPersonnel() {
     chargerShifts();
     chargerBesoins();
     chargerAssignations();
-  }, [moisCourant]);
+  }, [currentDate, refresh]);
 
   return (
     <div className="besoins-personnel">
-      <div className="navigation-mois">
-        <button onClick={() => handleMoisChange(-1)}>← Mois Précédent</button>
-        <span>{moisCourant.toLocaleString("fr-FR", { month: "long", year: "numeric" })}</span>
-        <button onClick={() => handleMoisChange(1)}>Mois Suivant →</button>
-      </div>
-
       <button className="ajouter-besoin" onClick={() => setFormulaireVisible(true)}>Ajouter Besoin</button>
       <button className="supprimer-tous-besoins" onClick={supprimerTousLesBesoins}>Supprimer tous les besoins</button>
-
-      <table className="besoins-table">
-        <thead>
-          <tr>
-            <th>Shifts</th>
-            {genererEntetes().map(({ affichage }, i) => (
-              <th key={i}>{affichage}</th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {shifts.map((shift) => (
-            <tr key={shift.id}>
-              <td>{shift.nom}</td>
-              {genererEntetes().map(({ dateISO }, i) => {
-                const { x, y, affichage } = calculerXY(dateISO, shift.id);
-                const couleurTexte = getCouleurTexte(x, y);
-
-                return (
-                  <td
-                    key={i}
-                    onClick={() => handleCelluleClick(dateISO, shift.id, affichage)}
-                    style={{ cursor: "pointer", color: couleurTexte }}
-                  >
-                    {affichage}
-                  </td>
-                );
-              })}
+      <div className="table-container">
+        <table className="besoins-table">
+          <thead>
+            <tr>
+              <th>Shifts</th>
+              {genererEntetes().map(({ affichage }, i) => (
+                <th key={i}>{affichage}</th>
+              ))}
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {shifts.map((shift) => (
+              <tr key={shift.id}>
+                <td>{shift.nom}</td>
+                {genererEntetes().map(({ dateISO }, i) => {
+                  const { x, y, affichage } = calculerXY(dateISO, shift.id);
+                  const couleurTexte = getCouleurTexte(x, y);
+
+                  return (
+                    <td
+                      key={i}
+                      onClick={() => handleCelluleClick(dateISO, shift.id, affichage)}
+                      style={{ cursor: "pointer", color: couleurTexte }}
+                    >
+                      {affichage}
+                    </td>
+                  );
+                })}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
 
       {formulaireVisible && (
         <FormulaireBesoins
           shifts={shifts}
-          mois={moisCourant.getMonth() + 1}
-          annee={moisCourant.getFullYear()}
+          mois={currentDate.getMonth() + 1}
+          annee={currentDate.getFullYear()}
           onFermer={() => setFormulaireVisible(false)}
           onEnregistrer={chargerBesoins}
         />
